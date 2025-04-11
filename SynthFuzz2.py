@@ -14,8 +14,6 @@
 # ---
 
 # %%
-
-# %%
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import cumulative_trapezoid as cumtrapz
@@ -26,15 +24,6 @@ import copy
 
 memory = Memory("./cache_dir", verbose=0)  # Cache directory
 
-
-# %% [markdown]
-#
-
-# %%
-# Run this in a notebook cell
-import nbformat
-notebook = nbformat.read("SynthFuzz2.ipynb", as_version=4)
-print("Metadata contents:", notebook.metadata)
 
 # %%
 duration = 10

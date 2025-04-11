@@ -14,17 +14,6 @@
 # ---
 
 # %%
-#Configure jupytext
-
-import nbformat
-import jupytext
-
-notebook = nbformat.read("SynthFuzz2.ipynb", as_version=4)
-notebook.metadata["jupytext"] = {"formats": "ipynb,py:percent"}
-nbformat.write(notebook, "SynthFuzz2.ipynb")
-
-notebook_to_write = jupytext.read("SynthFuzz2.ipynb")
-jupytext.write(notebook, "SynthFuzz2.ipynb")
 
 # %%
 import numpy as np

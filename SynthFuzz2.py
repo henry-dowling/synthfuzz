@@ -48,14 +48,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import firwin, lfilter, freqz
 
-print('this is a new edit'
-)
 
-print('im debugging')
-print('still debugging')
-print('just tried manually removing the .py version')
-
-def highpass_filter_30hz(signal, sample_rate=dasr, max_kernel_length=0.0001):
+def highpass_filter_30hz(signal: np.ndarray, sample_rate: float = dasr, max_kernel_length=0.0001):
     """
     Applies a high-pass FIR filter with a hard cutoff at 30 Hz.
 

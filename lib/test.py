@@ -26,7 +26,7 @@ wave = 2 * hz100 + 3 * hz200 + 4 * hz300
 
 # plt.plot(time[:12000], wave[:12000])
 # plt.show()
-
+##COMMENT 
 
 def plot_stuff(sw1, sw2, sw3, sw4):
     length = 1000

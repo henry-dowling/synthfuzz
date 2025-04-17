@@ -1,3 +1,9 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from lib.square import square_wave_maker
+from lib.triangle import triangle_wave_maker
+from lib.iterative_application import iterative_shape_applier, combo_shape_applier
+
 def main(input_signal, sample_rate=44100, window_size=10000, plot_length=1000, plot_offset=0, transformations=None):
     """
     Test different wave transformations on an input signal.

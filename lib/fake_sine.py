@@ -12,3 +12,9 @@ memory = Memory("./cache_dir", verbose=0)  # Cache directory
 
 
 #NOTHING GOOD YET LOL
+
+def fake_sine_wave_maker(audio, window):
+    deriv_audio = derivative(audio)
+    double_deriv_audio = derivative(deriv_audio)
+
+    

@@ -7,9 +7,9 @@ from tqdm import tqdm
 import copy
 from lib.utils import *
 from lib.square import square_wave_maker
-from lib.triangle import triangle_wave_maker
+from lib.triangle import triangle_wave_maker, old_triangle_wave_maker
 from lib.iterative_application import iterative_shape_applier, combo_shape_applier
-
+from lib.combined_approximator import combined_approximator
 
 memory = Memory("./cache_dir", verbose=0)  # Cache directory
 
@@ -92,13 +92,12 @@ def plot_stuff(sw1, sw2, sw3, sw4):
     plt.show()
     
 def small_plot_stuff(sw1):
-    length = 1000
+    length = 5000
     beg = (duration-1) * dasr
     
     end = length + beg
     halfway_beg = int((beg + end)/2)
     
-    plt.show()
     
     plt.plot(time[0:length], wave[0:length])
     plt.plot(time[0:length], sw1[0:length])
@@ -110,6 +109,11 @@ def small_plot_stuff(sw1):
     plt.plot(time[beg:end], sw1[beg:end])
     plt.plot(time[halfway_beg:end], wave[halfway_beg:end] - sw1[halfway_beg:end])
     
+    plt.show()
+
+    plt.plot(time[beg:end], sw1[beg:end])
+    
+    plt.show()
     
     length = len(time)
     beg = 0
@@ -121,11 +125,15 @@ def small_plot_stuff(sw1):
     plt.show()
     
  
-window = 10000
+window = 500
 
-sw1 = iterative_shape_applier(square_wave_maker, wave, 1, window)
-sw2 = iterative_shape_applier(square_wave_maker, wave, 2, window)
-sw3 = iterative_shape_applier(square_wave_maker, wave, 3, window)
-sw4 = iterative_shape_applier(square_wave_maker, wave, 4, window)
+sw1 = iterative_shape_applier(combined_approximator, wave, 1, window)
+small_plot_stuff(sw1)
+
+
+
+sw2 = iterative_shape_applier(combined_approximator, wave, 2, window)
+sw3 = iterative_shape_applier(combined_approximator, wave, 3, window)
+sw4 = iterative_shape_applier(combined_approximator, wave, 4, window)
 
 plot_stuff(sw1, sw2, sw3, sw4)

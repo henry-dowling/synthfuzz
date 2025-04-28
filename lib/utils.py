@@ -10,6 +10,8 @@ memory = Memory("./cache_dir", verbose=0)  # Cache directory
 
 
 def derivative(array):
+    if len(array) == 1:
+        return np.array([0])
     return np.gradient(array)
 
 def integral(array):
@@ -58,3 +60,25 @@ def mean_negative(audio):
     mask = (audio < 0).astype( np.float32)
     pos_elements = audio * mask
     return np.sign(np.sum(mask)) * (np.sum(pos_elements)/(np.sum(mask) + 1e-5))
+
+
+
+def highpass_dc_block(signal, alpha=0.995):
+    y = np.zeros_like(signal)
+    prev_y, prev_x = 0, 0
+    for i, x in enumerate(signal):
+        y[i] = x - prev_x + alpha * prev_y
+        prev_x = x
+        prev_y = y[i]
+    return y
+
+def mean_crossovers(audio):
+
+    deriv_audio = derivative(audio)
+    sign_audio = np.sign(deriv_audio)
+
+    crossovers = ((sign_audio[1:] * sign_audio[:-1]) < 0).astype(np.float32) * (sign_audio[1:] != 0).astype(np.float32)
+
+    return np.mean(crossovers)
+
+

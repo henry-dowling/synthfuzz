@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 import numpy as np
 import tempfile
 import os
+import base64
 from lib.utils import load_audio_file, save_audio_file
 from main import main
 
@@ -46,9 +47,10 @@ async def process_audio(audio: UploadFile = File(...)):
         output_path = tempfile.mktemp(suffix='.wav')
         save_audio_file(transformed_signals[0], sr, output_path)
         
-        # Read the processed audio file
+        # Read the processed audio file and encode as base64
         with open(output_path, 'rb') as f:
-            processed_audio = f.read()
+            audio_bytes = f.read()
+            audio_base64 = base64.b64encode(audio_bytes).decode('utf-8')
         
         # Clean up temporary files
         os.unlink(temp_file_path)
@@ -56,12 +58,13 @@ async def process_audio(audio: UploadFile = File(...)):
         
         return {
             "status": "success",
-            "audio": processed_audio
+            "audio": audio_base64
         }
         
     except Exception as e:
         # Clean up temporary file in case of error
-        os.unlink(temp_file_path)
+        if os.path.exists(temp_file_path):
+            os.unlink(temp_file_path)
         return {
             "status": "error",
             "message": str(e)

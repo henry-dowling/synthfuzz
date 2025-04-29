@@ -23,3 +23,9 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+
+backend/venv/
+backend/__pycache__/
+backend/**/*.pyc
+pyvenv.cfg

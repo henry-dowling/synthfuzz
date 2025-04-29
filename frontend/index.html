@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .upload-container {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #audioPlayer {
+            width: 100%;
+            margin: 20px 0;
+        }
+        #waveform {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            margin: 20px 0;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Processor</h1>
+    
+    <div class="upload-container">
+        <input type="file" id="audioInput" accept="audio/*">
+        <button onclick="processAudio()">Process Audio</button>
+    </div>
+
+    <div id="status" class="status"></div>
+    
+    <div id="waveform"></div>
+    
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        let currentAudio = null;
+
+        function showStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${isError ? 'error' : 'success'}`;
+        }
+
+        async function processAudio() {
+            const fileInput = document.getElementById('audioInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showStatus('Please select an audio file', true);
+                return;
+            }
+
+            showStatus('Processing...');
+
+            const formData = new FormData();
+            formData.append('audio', file);
+
+            try {
+                const response = await fetch('/process-audio', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error');
+                }
+
+                const result = await response.json();
+                
+                // Update audio player with processed audio
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = URL.createObjectURL(new Blob([result.audio], { type: 'audio/wav' }));
+                
+                showStatus('Processing complete!');
+            } catch (error) {
+                showStatus('Error processing audio: ' + error.message, true);
+            }
+        }
+
+        // Handle file selection
+        document.getElementById('audioInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = URL.createObjectURL(file);
+                showStatus('File selected: ' + file.name);
+            }
+        });
+    </script>
+</body>
+</html> 

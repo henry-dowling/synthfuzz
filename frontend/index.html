@@ -3,61 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Processor</title>
+    <title>Real Boy</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0f1115;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
             max-width: 800px;
-            margin: 0 auto;
             padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #e455d7;
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 0;
+        }
+        h2 {
+            text-align: center;
+            color: #999;
+            font-weight: normal;
+            margin-top: 10px;
         }
         .upload-container {
-            border: 2px dashed #ccc;
-            padding: 20px;
+            border: 2px dashed #333;
+            border-radius: 12px;
+            padding: 40px;
             text-align: center;
-            margin-bottom: 20px;
+            margin: 40px 0;
+            background-color: #1a1d23;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        #audioPlayer {
-            width: 100%;
+        .upload-container:hover {
+            border-color: #e455d7;
+            background-color: #1f222a;
+        }
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             margin: 20px 0;
         }
-        #waveform {
+        .file-info .icon {
+            color: #e455d7;
+            font-size: 24px;
+        }
+        #audioInput {
+            display: none;
+        }
+        .button {
+            background-color: #e455d7;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background-color: #c939bb;
+        }
+        .button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+        .waveform-container {
             width: 100%;
             height: 200px;
-            background-color: #f0f0f0;
+            background-color: #1a1d23;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .playback-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
             margin: 20px 0;
         }
         .status {
-            margin: 10px 0;
+            text-align: center;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 6px;
+            margin: 10px 0;
         }
         .success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: #1a472a;
+            color: #4ade80;
         }
         .error {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: #4c1d1d;
+            color: #f87171;
+        }
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            color: #666;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1>Audio Processor</h1>
-    
-    <div class="upload-container">
-        <input type="file" id="audioInput" accept="audio/*">
-        <button onclick="processAudio()">Process Audio</button>
+    <div class="container">
+        <h1>Real Boy</h1>
+        <h2>Upload an audio file to demo</h2>
+        
+        <div class="upload-container" onclick="document.getElementById('audioInput').click()">
+            <input type="file" id="audioInput" accept="audio/*">
+            <div id="dropText">Drop audio file here or click to upload</div>
+            <div id="fileInfo" class="file-info" style="display: none">
+                <span class="icon">🎵</span>
+                <span id="fileName"></span>
+            </div>
+        </div>
+
+        <div class="waveform-container">
+            <canvas id="waveformCanvas"></canvas>
+        </div>
+
+        <div class="playback-controls">
+            <button id="playOriginal" class="button" disabled>Play Original</button>
+            <button id="playProcessed" class="button" disabled>Play Processed</button>
+            <button id="stopButton" class="button" disabled>Stop</button>
+        </div>
+
+        <div id="status" class="status"></div>
     </div>
 
-    <div id="status" class="status"></div>
-    
-    <div id="waveform"></div>
-    
-    <audio id="audioPlayer" controls></audio>
+    <div class="footer">
+        © 2024 SynthFuzz. All rights reserved.
+    </div>
 
     <script>
-        let currentAudio = null;
+        let audioContext;
+        let originalBuffer = null;
+        let processedBuffer = null;
+        let currentSource = null;
+        let isPlaying = false;
+
+        // Initialize audio context on user interaction
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
 
         function showStatus(message, isError = false) {
             const statusDiv = document.getElementById('status');
@@ -65,17 +170,102 @@
             statusDiv.className = `status ${isError ? 'error' : 'success'}`;
         }
 
-        async function processAudio() {
-            const fileInput = document.getElementById('audioInput');
-            const file = fileInput.files[0];
+        async function loadAudioBuffer(arrayBuffer) {
+            initAudioContext();
+            return await audioContext.decodeAudioData(arrayBuffer);
+        }
+
+        function stopPlayback() {
+            if (currentSource) {
+                currentSource.stop();
+                currentSource = null;
+            }
+            isPlaying = false;
+            document.getElementById('stopButton').disabled = true;
+        }
+
+        async function playBuffer(buffer) {
+            if (isPlaying) {
+                stopPlayback();
+            }
+
+            currentSource = audioContext.createBufferSource();
+            currentSource.buffer = buffer;
+            currentSource.connect(audioContext.destination);
             
-            if (!file) {
-                showStatus('Please select an audio file', true);
+            currentSource.start(0);
+            isPlaying = true;
+            
+            document.getElementById('stopButton').disabled = false;
+            
+            currentSource.onended = () => {
+                isPlaying = false;
+                document.getElementById('stopButton').disabled = true;
+            };
+        }
+
+        function drawWaveform(canvas, buffer, color = '#e455d7') {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const data = buffer.getChannelData(0);
+            const step = Math.ceil(data.length / width);
+            const amp = height / 2;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < width; i++) {
+                const min = 1.0;
+                const max = -1.0;
+                for (let j = 0; j < step; j++) {
+                    const datum = data[(i * step) + j];
+                    if (datum < min) min = datum;
+                    if (datum > max) max = datum;
+                }
+                ctx.moveTo(i, (1 + min) * amp);
+                ctx.lineTo(i, (1 + max) * amp);
+            }
+
+            ctx.stroke();
+        }
+
+        // Handle file selection
+        document.getElementById('audioInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Update UI
+                document.getElementById('fileName').textContent = `${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+                document.getElementById('fileInfo').style.display = 'flex';
+                document.getElementById('dropText').style.display = 'none';
+
+                // Load original audio
+                const arrayBuffer = await file.arrayBuffer();
+                originalBuffer = await loadAudioBuffer(arrayBuffer);
+                
+                // Enable play button and draw waveform
+                document.getElementById('playOriginal').disabled = false;
+                const canvas = document.getElementById('waveformCanvas');
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                drawWaveform(canvas, originalBuffer);
+
+                showStatus('File loaded successfully');
+            }
+        });
+
+        // Process audio
+        async function processAudio() {
+            if (!originalBuffer) {
+                showStatus('Please select an audio file first', true);
                 return;
             }
 
             showStatus('Processing...');
 
+            const file = document.getElementById('audioInput').files[0];
             const formData = new FormData();
             formData.append('audio', file);
 
@@ -91,9 +281,12 @@
 
                 const result = await response.json();
                 
-                // Update audio player with processed audio
-                const audioPlayer = document.getElementById('audioPlayer');
-                audioPlayer.src = URL.createObjectURL(new Blob([result.audio], { type: 'audio/wav' }));
+                // Convert base64 to ArrayBuffer and decode
+                const processedArrayBuffer = await fetch(`data:audio/wav;base64,${result.audio}`).then(r => r.arrayBuffer());
+                processedBuffer = await loadAudioBuffer(processedArrayBuffer);
+                
+                // Enable processed play button
+                document.getElementById('playProcessed').disabled = false;
                 
                 showStatus('Processing complete!');
             } catch (error) {
@@ -101,13 +294,38 @@
             }
         }
 
-        // Handle file selection
-        document.getElementById('audioInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const audioPlayer = document.getElementById('audioPlayer');
-                audioPlayer.src = URL.createObjectURL(file);
-                showStatus('File selected: ' + file.name);
+        // Setup playback controls
+        document.getElementById('playOriginal').addEventListener('click', () => {
+            if (originalBuffer) playBuffer(originalBuffer);
+        });
+
+        document.getElementById('playProcessed').addEventListener('click', () => {
+            if (processedBuffer) playBuffer(processedBuffer);
+        });
+
+        document.getElementById('stopButton').addEventListener('click', stopPlayback);
+
+        // Handle drag and drop
+        const dropZone = document.querySelector('.upload-container');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#e455d7';
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#333';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#333';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('audio/')) {
+                const input = document.getElementById('audioInput');
+                input.files = e.dataTransfer.files;
+                input.dispatchEvent(new Event('change'));
             }
         });
     </script>

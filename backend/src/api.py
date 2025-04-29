@@ -6,7 +6,7 @@ import tempfile
 import os
 import base64
 from lib.utils import load_audio_file, save_audio_file
-from main import main
+from backend.src.main import main
 
 app = FastAPI()
 

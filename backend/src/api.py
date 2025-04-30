@@ -1,29 +1,27 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 import numpy as np
 import tempfile
 import os
 import base64
 from lib.utils import load_audio_file, save_audio_file
-from backend.src.main import main
+from .main import main
 
 app = FastAPI()
 
-# Enable CORS
+# Enable CORS for the frontend development server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000"],  # Next.js default development server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Mount the frontend directory
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
-
 @app.post("/process-audio")
 async def process_audio(audio: UploadFile = File(...)):
+
+    print("we start running process-audio")
     # Create a temporary file to store the uploaded audio
     with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(audio.filename)[1]) as temp_file:
         content = await audio.read()

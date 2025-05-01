@@ -31,7 +31,11 @@ async def process_audio(audio: UploadFile = File(...)):
     try:
         # Load the audio file
         signal, sr = load_audio_file(temp_file_path)
+
+        print('signal is', signal)
         
+        print('we get up to main')
+
         # Process the audio using your main function
         time, transformed_signals = main(
             signal,
@@ -53,6 +57,8 @@ async def process_audio(audio: UploadFile = File(...)):
         # Clean up temporary files
         os.unlink(temp_file_path)
         os.unlink(output_path)
+
+        print("we are about to return success")
         
         return {
             "status": "success",

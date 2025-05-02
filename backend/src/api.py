@@ -9,10 +9,13 @@ from main import main
 
 app = FastAPI()
 
-# Enable CORS for the frontend development server
+# Enable CORS for both development and production servers
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js default development server
+    allow_origins=[
+        "http://localhost:3000",  # Next.js default development server
+        "https://synthfuzz-396799589013.us-east1.run.app"  # Production server
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

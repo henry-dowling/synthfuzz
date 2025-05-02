@@ -7,6 +7,8 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processedAudio, setProcessedAudio] = useState<string | null>(null);
+  const [audioContentType, setAudioContentType] = useState<string | null>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -42,7 +44,6 @@ export default function Home() {
       const formData = new FormData();
       formData.append('audio', selectedFile);
 
-      console.log('we start fetching ayy');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`, {
         method: 'POST',
         body: formData,
@@ -52,13 +53,19 @@ export default function Home() {
         throw new Error('Failed to process audio');
       }
 
-      const data = await response.json();
-      if (data.status === 'success') {
-        // Handle the processed audio data (e.g., play it, display a link, etc.)
-        console.log('Processed audio:', data.audio);
-      } else {
-        console.error('Processing error:', data.message);
-      }
+      // Handle streaming response
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      setProcessedAudio(audioUrl);
+      
+      // Create a download link
+      const downloadUrl = document.createElement('a');
+      downloadUrl.href = audioUrl;
+      downloadUrl.download = 'processed_audio.wav';
+      document.body.appendChild(downloadUrl);
+      downloadUrl.click();
+      document.body.removeChild(downloadUrl);
+      
     } catch (error) {
       console.error('Processing failed:', error);
     } finally {
@@ -126,7 +133,7 @@ export default function Home() {
           </div>
 
           {selectedFile && (
-            <div className="mt-8 text-center">
+            <div className="mt-8 text-center space-y-6">
               <button
                 onClick={handleProcess}
                 disabled={isProcessing}
@@ -148,6 +155,22 @@ export default function Home() {
                   'Process Audio'
                 )}
               </button>
+
+              {processedAudio && (
+                <div className="mt-8 p-6 bg-gray-800 rounded-lg">
+                  <h3 className="text-lg font-medium mb-4">Processed Audio</h3>
+                  <audio 
+                    controls 
+                    className="w-full"
+                    src={processedAudio}
+                  >
+                    Your browser does not support the audio element.
+                  </audio>
+                  <p className="mt-4 text-sm text-gray-400">
+                    The processed file has been automatically downloaded. You can also play it above.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </main>

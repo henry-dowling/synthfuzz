@@ -135,6 +135,9 @@ def save_audio_file(signal: np.ndarray, sample_rate: int, file_path: str) -> Non
         - OGG
     """
     try:
+        # Normalize signal to prevent clipping
+        signal = librosa.util.normalize(signal)
+        # Use soundfile to save the audio
         sf.write(file_path, signal, sample_rate)
     except Exception as e:
         raise ValueError(f"Could not save audio file: {str(e)}")

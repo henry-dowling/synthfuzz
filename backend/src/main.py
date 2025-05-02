@@ -4,7 +4,10 @@ from lib.square import square_wave_maker
 from lib.triangle import triangle_wave_maker
 from lib.iterative_application import iterative_shape_applier, combo_shape_applier
 
-def main(input_signal, sample_rate=44100, window_size=10000, plot_length=1000, plot_offset=0, transformations=None):
+def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, plot_offset=0, transformations=None):
+    print('running main!')
+    print('input signal is', input_signal)
+    
     """
     Test different wave transformations on an input signal.
     
@@ -12,7 +15,7 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=1000, p
         input_signal (np.ndarray): Input audio signal
         sample_rate (int): Sampling rate of the signal (default: 44100)
         window_size (int): Window size for transformations (default: 10000)
-        plot_length (int): Number of samples to plot (default: 1000)
+        plot_length (int, optional): Number of samples to plot. If None, plots entire signal
         plot_offset (int): Offset in samples for where to start plotting (default: 0)
         transformations (list): List of transformation configurations, where each config is a dict with:
             - 'type': 'iterative' or 'combo'
@@ -56,8 +59,27 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=1000, p
         transformed_signals.append(signal)
     
     # Plot results
+    if plot_length is None:
+        plot_length = len(input_signal)  # Plot the entire signal
     end_idx = min(plot_offset + plot_length, len(input_signal))
-    plt.figure(figsize=(15, 5))
+    
+    print(f"Debug - Signal length: {len(input_signal)}")
+    print(f"Debug - Plot length: {plot_length}")
+    print(f"Debug - End index: {end_idx}")
+    print(f"Debug - Total duration: {len(input_signal)/sample_rate} seconds")
+    print(f"Debug - Plotted duration: {(end_idx-plot_offset)/sample_rate} seconds")
+    
+    # Calculate figure width based on signal duration
+    duration_in_seconds = (end_idx - plot_offset) / sample_rate
+    base_width = 15
+    width_scale = max(1, duration_in_seconds / 60)  # Scale width if duration > 60 seconds
+    plt.figure(figsize=(base_width * width_scale, 5))
+
+    # see what we're about to graph. Still a 12800k sample?
+    print('input signal right before graphing is', input_signal)
+    # Print top 100 values to verify signal is nonzero
+    sorted_vals = np.sort(np.abs(input_signal))[-100:]
+    print("Top 100 values in input signal:", sorted_vals)
     
     # Plot original signal
     plt.subplot(121)

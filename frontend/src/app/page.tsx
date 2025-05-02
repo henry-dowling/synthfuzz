@@ -38,10 +38,27 @@ export default function Home() {
     if (!selectedFile) return;
     
     setIsProcessing(true);
-    // TODO: Implement backend processing
     try {
-      // Add your backend processing logic here
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated processing
+      const formData = new FormData();
+      formData.append('audio', selectedFile);
+
+      console.log('we start fetching ayy');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to process audio');
+      }
+
+      const data = await response.json();
+      if (data.status === 'success') {
+        // Handle the processed audio data (e.g., play it, display a link, etc.)
+        console.log('Processed audio:', data.audio);
+      } else {
+        console.error('Processing error:', data.message);
+      }
     } catch (error) {
       console.error('Processing failed:', error);
     } finally {

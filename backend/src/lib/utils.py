@@ -105,6 +105,7 @@ def load_audio_file(file_path: str, target_sr: int = 44100) -> Tuple[np.ndarray,
     try:
         # Try loading with librosa first (supports more formats)
         signal, sr = librosa.load(file_path, sr=target_sr, mono=True)
+        print('we take the try path in librosa')
         return signal, sr
     except Exception as e:
         # Fallback to soundfile for WAV files

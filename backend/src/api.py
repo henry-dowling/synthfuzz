@@ -32,7 +32,7 @@ async def process_audio(audio: UploadFile = File(...)):
         # Load the audio file
         signal, sr = load_audio_file(temp_file_path)
 
-        print('signal is', signal)
+        print('signal max value:', np.max(signal), 'signal shape:', signal.shape)
         
         print('we get up to main')
 
@@ -41,7 +41,6 @@ async def process_audio(audio: UploadFile = File(...)):
             signal,
             sample_rate=sr,
             window_size=10000,
-            plot_length=1000,
             plot_offset=0
         )
         

@@ -7,7 +7,6 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedAudio, setProcessedAudio] = useState<string | null>(null);
-  const [audioContentType, setAudioContentType] = useState<string | null>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();

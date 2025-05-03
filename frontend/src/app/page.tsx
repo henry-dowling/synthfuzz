@@ -126,129 +126,91 @@ export default function Home() {
 
         {/* Demo Section */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Interactive Demo</h2>
+          <h2 className="text-2xl font-bold mb-8">Interactive Demo</h2>
           
-          {/* Audio Selection */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4">Choose Audio Input</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {SAMPLE_AUDIO_FILES.map((sample) => (
-                <div
-                  key={sample.id}
-                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                    selectedSample === sample.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                  onClick={() => {
-                    setSelectedSample(sample.id);
-                    setSelectedFile(null);
-                    setProcessedAudio(null);
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                    </svg>
-                    <div>
-                      <h4 className="font-medium">{sample.name}</h4>
-                      <p className="text-sm text-gray-600">{sample.description}</p>
-                    </div>
-                  </div>
-                  {selectedSample === sample.id && (
-                    <audio className="mt-4 w-full" controls src={sample.path}>
-                      Your browser does not support the audio element.
-                    </audio>
-                  )}
-                </div>
-              ))}
-
-              {/* Upload Card */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {SAMPLE_AUDIO_FILES.map((sample) => (
               <div
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  selectedFile ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                key={sample.id}
+                className={`p-4 rounded-lg border transition-all cursor-pointer ${
+                  selectedSample === sample.id
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-blue-300'
                 }`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
+                onClick={() => {
+                  setSelectedSample(sample.id);
+                  setSelectedFile(null);
+                  setProcessedAudio(null);
+                }}
               >
-                {selectedFile ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                      </svg>
-                      <div>
-                        <h4 className="font-medium">Selected File</h4>
-                        <p className="text-sm text-gray-600">{selectedFile.name}</p>
-                        <p className="text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setSelectedFile(null);
-                        setSelectedSample(null);
-                      }}
-                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-                    >
-                      Choose different file
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
-                      <div>
-                        <h4 className="font-medium">Try Your Own</h4>
-                        <p className="text-sm text-gray-600">Upload custom audio</p>
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <label className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer transition-colors text-sm">
-                        Choose File
-                        <input
-                          type="file"
-                          accept="audio/*"
-                          className="hidden"
-                          onChange={handleFileSelect}
-                        />
-                      </label>
-                    </div>
-                  </div>
+                <h4 className="font-medium mb-1">{sample.name}</h4>
+                <p className="text-sm text-gray-600 mb-3">{sample.description}</p>
+                {selectedSample === sample.id && (
+                  <audio className="w-full" controls src={sample.path}>
+                    Your browser does not support the audio element.
+                  </audio>
                 )}
               </div>
+            ))}
+
+            {/* Upload Card */}
+            <div
+              className={`p-4 rounded-lg border transition-all ${
+                selectedFile ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              {selectedFile ? (
+                <>
+                  <h4 className="font-medium mb-1">Selected File</h4>
+                  <p className="text-sm text-gray-600 mb-2">{selectedFile.name}</p>
+                  <p className="text-xs text-gray-500 mb-3">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                  <button
+                    onClick={() => {
+                      setSelectedFile(null);
+                      setSelectedSample(null);
+                    }}
+                    className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    Choose different file
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h4 className="font-medium mb-1">Upload Audio</h4>
+                  <p className="text-sm text-gray-600 mb-3">Try your own audio file</p>
+                  <label className="inline-block px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded cursor-pointer transition-colors">
+                    Choose File
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      className="hidden"
+                      onChange={handleFileSelect}
+                    />
+                  </label>
+                </>
+              )}
             </div>
           </div>
 
           {(selectedFile || selectedSample) && (
-            <div className="mt-8 text-center space-y-6">
+            <div className="text-center">
               <button
                 onClick={handleProcess}
                 disabled={isProcessing}
-                className={`px-8 py-3 rounded-lg font-medium transition-all text-white ${
+                className={`px-6 py-2 rounded font-medium transition-all text-white ${
                   isProcessing
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
-                {isProcessing ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Processing...
-                  </span>
-                ) : (
-                  'Process Audio'
-                )}
+                {isProcessing ? 'Processing...' : 'Process Audio'}
               </button>
 
               {processedAudio && (
-                <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-medium mb-4">Processed Audio</h3>
+                <div className="mt-8 p-4 bg-gray-50 rounded border border-gray-200">
                   <audio 
                     controls 
                     className="w-full"
@@ -256,8 +218,8 @@ export default function Home() {
                   >
                     Your browser does not support the audio element.
                   </audio>
-                  <p className="mt-4 text-sm text-gray-600">
-                    The processed file has been automatically downloaded. You can also play it above.
+                  <p className="mt-2 text-sm text-gray-600">
+                    The processed file has been automatically downloaded
                   </p>
                 </div>
               )}

@@ -79,14 +79,6 @@ export default function Home() {
       const audioUrl = URL.createObjectURL(blob);
       setProcessedAudio(audioUrl);
       
-      // Create a download link
-      const downloadUrl = document.createElement('a');
-      downloadUrl.href = audioUrl;
-      downloadUrl.download = 'processed_audio.wav';
-      document.body.appendChild(downloadUrl);
-      downloadUrl.click();
-      document.body.removeChild(downloadUrl);
-      
     } catch (error) {
       console.error('Processing failed:', error);
     } finally {
@@ -187,7 +179,7 @@ export default function Home() {
                 className={`px-6 py-2 rounded font-medium transition-all text-white ${
                   isProcessing
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700'
+                    : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
                 }`}
               >
                 {isProcessing ? 'Processing...' : 'Process Audio'}
@@ -202,9 +194,21 @@ export default function Home() {
                   >
                     Your browser does not support the audio element.
                   </audio>
-                  <p className="mt-2 text-sm text-gray-600">
-                    The processed file has been automatically downloaded
-                  </p>
+                  <div className="mt-4 flex justify-center">
+                    <button
+                      onClick={() => {
+                        const downloadUrl = document.createElement('a');
+                        downloadUrl.href = processedAudio;
+                        downloadUrl.download = 'processed_audio.wav';
+                        document.body.appendChild(downloadUrl);
+                        downloadUrl.click();
+                        document.body.removeChild(downloadUrl);
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+                    >
+                      Download Processed Audio
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

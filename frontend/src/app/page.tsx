@@ -74,21 +74,36 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <div className="container mx-auto px-4 py-16">
-        <header className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Real Boy
+    <div className="min-h-screen bg-white text-gray-900">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Paper Header */}
+        <header className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-6">
+            SynthFuzz: High-Fidelity Synth Pedal
           </h1>
-          <p className="text-xl text-gray-300">
-            Upload an audio file to demo
-          </p>
+          <div className="mb-8">
+          </div>
+          <div className="flex justify-center space-x-4 text-sm">
+            <a href="#" className="text-blue-600 hover:underline">Blog</a>
+            <a href="https://github.com/yourusername/synthfuzz" className="text-blue-600 hover:underline">Code</a>
+            <a href="#" className="text-blue-600 hover:underline">Purchase</a>
+          </div>
         </header>
 
-        <main className="max-w-3xl mx-auto">
+        {/* Abstract Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-4">Abstract</h2>
+          <p className="text-gray-800 leading-relaxed">
+              Modular synthesis for real guitar sounds.
+          </p>
+        </section>
+
+        {/* Demo Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Interactive Demo</h2>
           <div 
-            className={`border-2 border-dashed rounded-lg p-12 text-center transition-all duration-300 ${
-              isDragging ? 'border-purple-500 bg-purple-900/20' : 'border-gray-700'
+            className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300 bg-gray-50 ${
+              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -97,17 +112,17 @@ export default function Home() {
             {selectedFile ? (
               <div className="space-y-4">
                 <div className="flex items-center justify-center gap-4">
-                  <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                   </svg>
                   <div className="text-left">
                     <p className="font-medium">{selectedFile.name}</p>
-                    <p className="text-sm text-gray-400">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                    <p className="text-sm text-gray-600">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedFile(null)}
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
                 >
                   Choose different file
                 </button>
@@ -118,8 +133,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
                 <p className="text-lg">Drag and drop your audio file here</p>
-                <p className="text-sm text-gray-400">or</p>
-                <label className="inline-block px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg cursor-pointer transition-colors">
+                <p className="text-sm text-gray-500">or</p>
+                <label className="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer transition-colors">
                   Browse Files
                   <input
                     type="file"
@@ -137,10 +152,10 @@ export default function Home() {
               <button
                 onClick={handleProcess}
                 disabled={isProcessing}
-                className={`px-8 py-3 rounded-lg font-medium transition-all ${
+                className={`px-8 py-3 rounded-lg font-medium transition-all text-white ${
                   isProcessing
-                    ? 'bg-gray-700 cursor-not-allowed'
-                    : 'bg-purple-600 hover:bg-purple-700'
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 {isProcessing ? (
@@ -157,7 +172,7 @@ export default function Home() {
               </button>
 
               {processedAudio && (
-                <div className="mt-8 p-6 bg-gray-800 rounded-lg">
+                <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
                   <h3 className="text-lg font-medium mb-4">Processed Audio</h3>
                   <audio 
                     controls 
@@ -166,17 +181,17 @@ export default function Home() {
                   >
                     Your browser does not support the audio element.
                   </audio>
-                  <p className="mt-4 text-sm text-gray-400">
+                  <p className="mt-4 text-sm text-gray-600">
                     The processed file has been automatically downloaded. You can also play it above.
                   </p>
                 </div>
               )}
             </div>
           )}
-        </main>
+        </section>
 
-        <footer className="mt-32 text-center text-gray-400">
-          <p>© 2024 SynthFuzz. All rights reserved.</p>
+        <footer className="mt-16 text-center text-gray-600 text-sm">
+          <p>© 2025 Willowmere Research. All rights reserved.</p>
         </footer>
       </div>
     </div>

@@ -15,6 +15,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",  # Next.js default development server
         "https://synthfuzz.vercel.app"  # Vercel frontend
+        "https://synthfuzz.com" # prod frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],

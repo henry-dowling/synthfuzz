@@ -42,6 +42,8 @@ export default function Home() {
       const formData = new FormData();
       formData.append('audio', selectedFile);
 
+      console.log('[API CALL]', 'Requesting:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`);
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`, {
         method: 'POST',
         body: formData,

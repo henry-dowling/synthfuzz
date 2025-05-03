@@ -162,20 +162,29 @@ export default function Home() {
 
             {/* Upload Card */}
             <div
-              className={`p-4 rounded-lg border transition-all ${
+              className={`p-4 rounded-lg border transition-all cursor-pointer ${
                 selectedFile ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
+              onClick={() => document.getElementById('fileInput')?.click()}
             >
+              <input
+                type="file"
+                id="fileInput"
+                accept="audio/*"
+                className="hidden"
+                onChange={handleFileSelect}
+              />
               {selectedFile ? (
                 <>
                   <h4 className="font-medium mb-1">Selected File</h4>
                   <p className="text-sm text-gray-600 mb-2">{selectedFile.name}</p>
                   <p className="text-xs text-gray-500 mb-3">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setSelectedFile(null);
                       setSelectedSample(null);
                     }}
@@ -185,19 +194,10 @@ export default function Home() {
                   </button>
                 </>
               ) : (
-                <>
+                <div className="text-center">
                   <h4 className="font-medium mb-1">Upload Audio</h4>
-                  <p className="text-sm text-gray-600 mb-3">Try your own audio file</p>
-                  <label className="inline-block px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded cursor-pointer transition-colors">
-                    Choose File
-                    <input
-                      type="file"
-                      accept="audio/*"
-                      className="hidden"
-                      onChange={handleFileSelect}
-                    />
-                  </label>
-                </>
+                  <p className="text-sm text-gray-600">Click to choose an audio file.</p>
+                </div>
               )}
             </div>
           </div>

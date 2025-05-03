@@ -9,7 +9,7 @@ ENV PYTHONPATH=/app/src
 # Copy local code to the container image
 WORKDIR /app
 COPY requirements.txt .
-COPY backend/src ./src
+COPY src ./src
 
 # Install production dependencies
 RUN pip install --no-cache-dir -r requirements.txt

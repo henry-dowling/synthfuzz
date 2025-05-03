@@ -2,11 +2,34 @@
 
 import { useState } from "react";
 
+// Sample audio data
+const SAMPLE_AUDIO_FILES = [
+  {
+    id: 'electric',
+    name: 'Electric Guitar',
+    description: 'Clean electric guitar preset',
+    path: '/audio-samples/clean-guitar.wav'
+  },
+  {
+    id: 'acoustic',
+    name: 'Acoustic Guitar',
+    description: 'Acoustic guitar preset',
+    path: '/audio-samples/acoustic.wav'
+  },
+  {
+    id: 'piano',
+    name: 'Piano',
+    description: 'Piano preset',
+    path: '/audio-samples/piano.wav'
+  }
+];
+
 export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedAudio, setProcessedAudio] = useState<string | null>(null);
+  const [selectedSample, setSelectedSample] = useState<string | null>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -35,12 +58,23 @@ export default function Home() {
   };
 
   const handleProcess = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile && !selectedSample) return;
     
     setIsProcessing(true);
     try {
       const formData = new FormData();
-      formData.append('audio', selectedFile);
+      
+      if (selectedFile) {
+        formData.append('audio', selectedFile);
+      } else if (selectedSample) {
+        // Fetch the sample audio file and append it to the form data
+        const sampleFile = SAMPLE_AUDIO_FILES.find(s => s.id === selectedSample);
+        if (!sampleFile) throw new Error('Sample file not found');
+        
+        const response = await fetch(sampleFile.path);
+        const blob = await response.blob();
+        formData.append('audio', blob, sampleFile.name + '.wav');
+      }
 
       console.log('[API CALL]', 'Requesting:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`);
 
@@ -90,64 +124,105 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Abstract Section */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Abstract</h2>
-          <p className="text-gray-800 leading-relaxed">
-              Modular synthesis for real guitar sounds.
-          </p>
-        </section>
-
         {/* Demo Section */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Interactive Demo</h2>
-          <div 
-            className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300 bg-gray-50 ${
-              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
-            }`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            {selectedFile ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-center gap-4">
-                  <svg className="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                  </svg>
-                  <div className="text-left">
-                    <p className="font-medium">{selectedFile.name}</p>
-                    <p className="text-sm text-gray-600">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSelectedFile(null)}
-                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          
+          {/* Audio Selection */}
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-4">Choose Audio Input</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {SAMPLE_AUDIO_FILES.map((sample) => (
+                <div
+                  key={sample.id}
+                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                    selectedSample === sample.id
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-blue-300'
+                  }`}
+                  onClick={() => {
+                    setSelectedSample(sample.id);
+                    setSelectedFile(null);
+                    setProcessedAudio(null);
+                  }}
                 >
-                  Choose different file
-                </button>
+                  <div className="flex items-center gap-3">
+                    <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                    </svg>
+                    <div>
+                      <h4 className="font-medium">{sample.name}</h4>
+                      <p className="text-sm text-gray-600">{sample.description}</p>
+                    </div>
+                  </div>
+                  {selectedSample === sample.id && (
+                    <audio className="mt-4 w-full" controls src={sample.path}>
+                      Your browser does not support the audio element.
+                    </audio>
+                  )}
+                </div>
+              ))}
+
+              {/* Upload Card */}
+              <div
+                className={`p-4 rounded-lg border-2 transition-all ${
+                  selectedFile ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                }`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                {selectedFile ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                      </svg>
+                      <div>
+                        <h4 className="font-medium">Selected File</h4>
+                        <p className="text-sm text-gray-600">{selectedFile.name}</p>
+                        <p className="text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setSelectedFile(null);
+                        setSelectedSample(null);
+                      }}
+                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                      Choose different file
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                      <div>
+                        <h4 className="font-medium">Try Your Own</h4>
+                        <p className="text-sm text-gray-600">Upload custom audio</p>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <label className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer transition-colors text-sm">
+                        Choose File
+                        <input
+                          type="file"
+                          accept="audio/*"
+                          className="hidden"
+                          onChange={handleFileSelect}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="space-y-4">
-                <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-                <p className="text-lg">Drag and drop your audio file here</p>
-                <p className="text-sm text-gray-500">or</p>
-                <label className="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer transition-colors">
-                  Browse Files
-                  <input
-                    type="file"
-                    accept="audio/*"
-                    className="hidden"
-                    onChange={handleFileSelect}
-                  />
-                </label>
-              </div>
-            )}
+            </div>
           </div>
 
-          {selectedFile && (
+          {(selectedFile || selectedSample) && (
             <div className="mt-8 text-center space-y-6">
               <button
                 onClick={handleProcess}

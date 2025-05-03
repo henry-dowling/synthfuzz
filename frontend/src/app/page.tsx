@@ -207,6 +207,9 @@ export default function Home() {
               >
                 {isProcessing ? 'Processing...' : 'Process Audio'}
               </button>
+              {isProcessing && (
+                <p className="mt-4 text-sm text-gray-600">This usually takes about 60 seconds</p>
+              )}
 
               {processedAudio && (
                 <div className="mt-8 space-y-8">

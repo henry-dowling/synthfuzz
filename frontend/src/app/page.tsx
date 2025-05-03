@@ -25,30 +25,10 @@ const SAMPLE_AUDIO_FILES = [
 ];
 
 export default function Home() {
-  const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedAudio, setProcessedAudio] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>(null);
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('audio/')) {
-      setSelectedFile(file);
-    }
-  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -165,9 +145,6 @@ export default function Home() {
               className={`p-4 rounded-lg border transition-all cursor-pointer ${
                 selectedFile ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
               }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
               onClick={() => document.getElementById('fileInput')?.click()}
             >
               <input

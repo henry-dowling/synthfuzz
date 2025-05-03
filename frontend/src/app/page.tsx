@@ -31,6 +31,7 @@ export default function Home() {
   const [fullPlot, setFullPlot] = useState<string | null>(null);
   const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>(null);
+  const [isFaqOpen, setIsFaqOpen] = useState(false);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -110,12 +111,12 @@ export default function Home() {
         {/* Paper Header */}
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-6">
-            SynthFuzz: High-Fidelity Synth Pedal
+            Real Boy: High-Fidelity Synth Fuzz Pedal
           </h1>
           <div className="mb-8">
           </div>
           <div className="flex justify-center space-x-4 text-sm">
-            <a href="#" className="text-blue-600 hover:underline">Blog</a>
+            <a href="#" className="text-blue-600 hover:underline">About</a>
             <a href="https://github.com/yourusername/synthfuzz" className="text-blue-600 hover:underline">Code</a>
             <a href="#" className="text-blue-600 hover:underline">Purchase</a>
           </div>
@@ -123,7 +124,7 @@ export default function Home() {
 
         {/* Demo Section */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-8">Interactive Demo</h2>
+          <h2 className="text-2xl font-bold mb-8">Select an Audio Input</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {SAMPLE_AUDIO_FILES.map((sample) => (
@@ -266,8 +267,35 @@ export default function Home() {
           )}
         </section>
 
+        {/* FAQ Section */}
+        <section className="mb-12">
+          <button
+            onClick={() => setIsFaqOpen(!isFaqOpen)}
+            className="w-full text-left flex justify-between items-center mb-4 cursor-pointer hover:text-gray-600 transition-colors"
+          >
+            <h2 className="text-2xl font-bold">How Does It Work?</h2>
+            <svg
+              className={`w-6 h-6 transform transition-transform ${isFaqOpen ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          {isFaqOpen && (
+            <div className="prose max-w-none">
+              {/* You can fill this section with your explanation */}
+              <p className="text-gray-600">
+                The 
+              </p>
+            </div>
+          )}
+        </section>
+
         <footer className="mt-16 text-center text-gray-600 text-sm">
-          <p>© 2025 Willowmere Research. All rights reserved.</p>
+          <p>© 2025 Willowmere Research.</p>
         </footer>
       </div>
     </div>

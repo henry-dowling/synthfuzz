@@ -7,20 +7,20 @@ const SAMPLE_AUDIO_FILES = [
   {
     id: 'electric',
     name: 'Electric Guitar',
-    description: 'Clean electric guitar preset',
-    path: '/audio-samples/clean-guitar.wav'
+    description: 'Straten Marshall',
+    path: '/audio-samples/shred.mp3'
   },
   {
     id: 'acoustic',
     name: 'Acoustic Guitar',
-    description: 'Acoustic guitar preset',
-    path: '/audio-samples/acoustic.wav'
+    description: 'Matt Fish',
+    path: '/audio-samples/acoustic.mp3'
   },
   {
     id: 'piano',
     name: 'Piano',
-    description: 'Piano preset',
-    path: '/audio-samples/piano.wav'
+    description: 'Art Tatum',
+    path: '/audio-samples/piano.mp3'
   }
 ];
 
@@ -66,17 +66,24 @@ export default function Home() {
       
       if (selectedFile) {
         formData.append('audio', selectedFile);
+        formData.append('preset', 'custom'); // Add preset info for uploaded files
       } else if (selectedSample) {
         // Fetch the sample audio file and append it to the form data
         const sampleFile = SAMPLE_AUDIO_FILES.find(s => s.id === selectedSample);
         if (!sampleFile) throw new Error('Sample file not found');
         
+        // Add preset information
+        formData.append('preset', sampleFile.id);
+        
+        // Fetch and append the sample audio
         const response = await fetch(sampleFile.path);
+        if (!response.ok) throw new Error('Failed to fetch sample audio');
         const blob = await response.blob();
-        formData.append('audio', blob, sampleFile.name + '.wav');
+        formData.append('audio', blob, `${sampleFile.id}.wav`);
       }
 
-      console.log('[API CALL]', 'Requesting:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`);
+      console.log('[API CALL]', 'Requesting:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`, 
+        'with preset:', formData.get('preset'));
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/process-audio`, {
         method: 'POST',

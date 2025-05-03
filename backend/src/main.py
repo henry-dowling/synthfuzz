@@ -26,7 +26,7 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
             - 'iterations': number of iterations (for iterative type)
     
     Returns:
-        tuple: (time array, list of transformed signals, plot_bytes)
+        tuple: (time array, list of transformed signals, full_plot_bytes, zoomed_plot_bytes)
     """
     if transformations is None:
         transformations = [
@@ -60,62 +60,60 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
                 window_size
             )
         transformed_signals.append(signal)
-    
-    # Plot results
-    if plot_length is None:
-        plot_length = len(input_signal)  # Plot the entire signal
-    end_idx = min(plot_offset + plot_length, len(input_signal))
-    
-    print(f"Debug - Signal length: {len(input_signal)}")
-    print(f"Debug - Plot length: {plot_length}")
-    print(f"Debug - End index: {end_idx}")
-    print(f"Debug - Total duration: {len(input_signal)/sample_rate} seconds")
-    print(f"Debug - Plotted duration: {(end_idx-plot_offset)/sample_rate} seconds")
-    
-    # Calculate figure width based on signal duration
-    duration_in_seconds = (end_idx - plot_offset) / sample_rate
-    base_width = 15
-    width_scale = max(1, duration_in_seconds / 60)  # Scale width if duration > 60 seconds
-    fig = plt.figure(figsize=(base_width * width_scale, 12))  # Increased height
 
-    # see what we're about to graph. Still a 12800k sample?
-    print('input signal right before graphing is', input_signal)
-    # Print top 100 values to verify signal is nonzero
-    sorted_vals = np.sort(np.abs(input_signal))[-100:]
-    print("Top 100 values in input signal:", sorted_vals)
+    # Function to create plots
+    def create_plots(start_idx, end_idx, figsize=(15, 12)):
+        fig = plt.figure(figsize=figsize)
+        
+        # Plot original signal
+        plt.subplot(211)
+        plt.title('Original vs Transformed')
+        plt.plot(time[start_idx:end_idx], input_signal[start_idx:end_idx], label='Original', alpha=0.7)
+        
+        # Plot all transformations
+        for i, signal in enumerate(transformed_signals):
+            plt.plot(time[start_idx:end_idx], signal[start_idx:end_idx], 
+                    label=f'Transform {i+1}', alpha=0.7)
+        
+        plt.legend()
+        plt.grid(True)
+        plt.margins(x=0)
+        
+        # Plot residuals
+        plt.subplot(212)
+        plt.title('Residuals')
+        for i, signal in enumerate(transformed_signals):
+            residual = input_signal - signal
+            plt.plot(time[start_idx:end_idx], residual[start_idx:end_idx], 
+                    label=f'Residual {i+1}', alpha=0.7)
+        
+        plt.legend()
+        plt.grid(True)
+        plt.margins(x=0)
+        plt.tight_layout(pad=3.0)
+        
+        # Save plot to bytes buffer
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', dpi=300, bbox_inches='tight')
+        buf.seek(0)
+        plot_bytes = buf.getvalue()
+        plt.close(fig)
+        
+        return plot_bytes
+
+    # Create full plot
+    if plot_length is None:
+        plot_length = len(input_signal)
+    end_idx = min(plot_offset + plot_length, len(input_signal))
+    full_plot_bytes = create_plots(plot_offset, end_idx)
+
+    # Create zoomed plot (25ms window at middle of signal)
+    samples_per_ms = sample_rate // 1000
+    zoom_window_ms = 50  # Changed from 100ms to 25ms
+    zoom_samples = samples_per_ms * zoom_window_ms
+    mid_point = len(input_signal) // 2
+    zoom_start = mid_point - (zoom_samples // 2)
+    zoom_end = mid_point + (zoom_samples // 2)
+    zoomed_plot_bytes = create_plots(zoom_start, zoom_end)
     
-    # Plot original signal
-    plt.subplot(211)  # Changed to 2 rows, 1 column, first plot
-    plt.title('Original vs Transformed')
-    plt.plot(time[plot_offset:end_idx], input_signal[plot_offset:end_idx], label='Original', alpha=0.7)
-    
-    # Plot all transformations
-    for i, signal in enumerate(transformed_signals):
-        plt.plot(time[plot_offset:end_idx], signal[plot_offset:end_idx], 
-                label=f'Transform {i+1}', alpha=0.7)
-    
-    plt.legend()
-    plt.grid(True)
-    plt.margins(x=0)  # Remove horizontal margins
-    
-    # Plot residuals
-    plt.subplot(212)  # Changed to 2 rows, 1 column, second plot
-    plt.title('Residuals')
-    for i, signal in enumerate(transformed_signals):
-        residual = input_signal - signal
-        plt.plot(time[plot_offset:end_idx], residual[plot_offset:end_idx], 
-                label=f'Residual {i+1}', alpha=0.7)
-    
-    plt.legend()
-    plt.grid(True)
-    plt.margins(x=0)  # Remove horizontal margins
-    plt.tight_layout(pad=3.0)  # Added more padding between plots
-    
-    # Save plot to bytes buffer
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png', dpi=300, bbox_inches='tight')
-    buf.seek(0)
-    plot_bytes = buf.getvalue()
-    plt.close(fig)
-    
-    return time, transformed_signals, plot_bytes
+    return time, transformed_signals, full_plot_bytes, zoomed_plot_bytes

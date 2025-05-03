@@ -28,7 +28,8 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedAudio, setProcessedAudio] = useState<string | null>(null);
-  const [plotImage, setPlotImage] = useState<string | null>(null);
+  const [fullPlot, setFullPlot] = useState<string | null>(null);
+  const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +44,8 @@ export default function Home() {
     
     setIsProcessing(true);
     setProcessedAudio(null);
-    setPlotImage(null);
+    setFullPlot(null);
+    setZoomedPlot(null);
     
     try {
       const formData = new FormData();
@@ -86,10 +88,14 @@ export default function Home() {
       const audioUrl = URL.createObjectURL(audioBlob);
       setProcessedAudio(audioUrl);
       
-      // Set plot image
-      const plotBlob = await fetch(data.plot).then(r => r.blob());
-      const plotUrl = URL.createObjectURL(plotBlob);
-      setPlotImage(plotUrl);
+      // Set plot images
+      const fullPlotBlob = await fetch(data.fullPlot).then(r => r.blob());
+      const fullPlotUrl = URL.createObjectURL(fullPlotBlob);
+      setFullPlot(fullPlotUrl);
+
+      const zoomedPlotBlob = await fetch(data.zoomedPlot).then(r => r.blob());
+      const zoomedPlotUrl = URL.createObjectURL(zoomedPlotBlob);
+      setZoomedPlot(zoomedPlotUrl);
       
     } catch (error) {
       console.error('Processing failed:', error);
@@ -132,7 +138,8 @@ export default function Home() {
                   setSelectedSample(sample.id);
                   setSelectedFile(null);
                   setProcessedAudio(null);
-                  setPlotImage(null);
+                  setFullPlot(null);
+                  setZoomedPlot(null);
                 }}
               >
                 <h4 className="font-medium mb-1">{sample.name}</h4>
@@ -170,7 +177,8 @@ export default function Home() {
                       setSelectedFile(null);
                       setSelectedSample(null);
                       setProcessedAudio(null);
-                      setPlotImage(null);
+                      setFullPlot(null);
+                      setZoomedPlot(null);
                     }}
                     className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                   >
@@ -228,12 +236,23 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {plotImage && (
+                  {fullPlot && (
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
-                      <h3 className="text-lg font-medium mb-4"></h3>
+                      <h3 className="text-lg font-medium mb-4">Full Signal Analysis</h3>
                       <img 
-                        src={plotImage} 
-                        alt="Signal analysis plot"
+                        src={fullPlot} 
+                        alt="Full signal analysis plot"
+                        className="w-full h-auto rounded"
+                      />
+                    </div>
+                  )}
+
+                  {zoomedPlot && (
+                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                      <h3 className="text-lg font-medium mb-4">Zoomed-in Signal Analysis</h3>
+                      <img 
+                        src={zoomedPlot} 
+                        alt="Zoomed signal analysis plot"
                         className="w-full h-auto rounded"
                       />
                     </div>

@@ -38,7 +38,7 @@ async def process_audio(audio: UploadFile = File(...)):
         signal, sr = load_audio_file(temp_file_path)
         
         # Process the audio using your main function
-        time, transformed_signals, plot_bytes = main(
+        time, transformed_signals, full_plot_bytes, zoomed_plot_bytes = main(
             signal,
             sample_rate=sr,
             window_size=10000,
@@ -59,14 +59,16 @@ async def process_audio(audio: UploadFile = File(...)):
         # Clean up output temp file
         os.unlink(output_path)
 
-        # Convert both audio and plot to base64
+        # Convert audio and plots to base64
         audio_b64 = base64.b64encode(audio_bytes).decode('utf-8')
-        plot_b64 = base64.b64encode(plot_bytes).decode('utf-8')
+        full_plot_b64 = base64.b64encode(full_plot_bytes).decode('utf-8')
+        zoomed_plot_b64 = base64.b64encode(zoomed_plot_bytes).decode('utf-8')
 
-        # Return JSON with both audio and plot data
+        # Return JSON with audio and plot data
         return JSONResponse({
             "audio": f"data:audio/wav;base64,{audio_b64}",
-            "plot": f"data:image/png;base64,{plot_b64}"
+            "fullPlot": f"data:image/png;base64,{full_plot_b64}",
+            "zoomedPlot": f"data:image/png;base64,{zoomed_plot_b64}"
         })
         
     except Exception as e:

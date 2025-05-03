@@ -76,7 +76,7 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
     duration_in_seconds = (end_idx - plot_offset) / sample_rate
     base_width = 15
     width_scale = max(1, duration_in_seconds / 60)  # Scale width if duration > 60 seconds
-    fig = plt.figure(figsize=(base_width * width_scale, 5))
+    fig = plt.figure(figsize=(base_width * width_scale, 12))  # Increased height
 
     # see what we're about to graph. Still a 12800k sample?
     print('input signal right before graphing is', input_signal)
@@ -85,7 +85,7 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
     print("Top 100 values in input signal:", sorted_vals)
     
     # Plot original signal
-    plt.subplot(121)
+    plt.subplot(211)  # Changed to 2 rows, 1 column, first plot
     plt.title('Original vs Transformed')
     plt.plot(time[plot_offset:end_idx], input_signal[plot_offset:end_idx], label='Original', alpha=0.7)
     
@@ -96,9 +96,10 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
     
     plt.legend()
     plt.grid(True)
+    plt.margins(x=0)  # Remove horizontal margins
     
     # Plot residuals
-    plt.subplot(122)
+    plt.subplot(212)  # Changed to 2 rows, 1 column, second plot
     plt.title('Residuals')
     for i, signal in enumerate(transformed_signals):
         residual = input_signal - signal
@@ -107,7 +108,8 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
     
     plt.legend()
     plt.grid(True)
-    plt.tight_layout()
+    plt.margins(x=0)  # Remove horizontal margins
+    plt.tight_layout(pad=3.0)  # Added more padding between plots
     
     # Save plot to bytes buffer
     buf = io.BytesIO()

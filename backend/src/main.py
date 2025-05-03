@@ -1,8 +1,11 @@
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Set the backend before importing pyplot
 import matplotlib.pyplot as plt
 from lib.square import square_wave_maker
 from lib.triangle import triangle_wave_maker
 from lib.iterative_application import iterative_shape_applier, combo_shape_applier
+import io
 
 def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, plot_offset=0, transformations=None):
     print('running main!')
@@ -23,7 +26,7 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
             - 'iterations': number of iterations (for iterative type)
     
     Returns:
-        tuple: (time array, list of transformed signals)
+        tuple: (time array, list of transformed signals, plot_bytes)
     """
     if transformations is None:
         transformations = [
@@ -73,7 +76,7 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
     duration_in_seconds = (end_idx - plot_offset) / sample_rate
     base_width = 15
     width_scale = max(1, duration_in_seconds / 60)  # Scale width if duration > 60 seconds
-    plt.figure(figsize=(base_width * width_scale, 5))
+    fig = plt.figure(figsize=(base_width * width_scale, 5))
 
     # see what we're about to graph. Still a 12800k sample?
     print('input signal right before graphing is', input_signal)
@@ -105,6 +108,12 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
     
-    return time, transformed_signals
+    # Save plot to bytes buffer
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', dpi=300, bbox_inches='tight')
+    buf.seek(0)
+    plot_bytes = buf.getvalue()
+    plt.close(fig)
+    
+    return time, transformed_signals, plot_bytes

@@ -1,8 +1,10 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 import numpy as np
 import tempfile
+import io
+import base64
 import os
 from lib.utils import load_audio_file, save_audio_file
 from main import main
@@ -36,7 +38,7 @@ async def process_audio(audio: UploadFile = File(...)):
         signal, sr = load_audio_file(temp_file_path)
         
         # Process the audio using your main function
-        time, transformed_signals = main(
+        time, transformed_signals, plot_bytes = main(
             signal,
             sample_rate=sr,
             window_size=10000,
@@ -50,30 +52,34 @@ async def process_audio(audio: UploadFile = File(...)):
         # Clean up input temp file
         os.unlink(temp_file_path)
 
-        # Create generator to stream the file
-        def iterfile():
-            with open(output_path, mode="rb") as file_like:
-                yield from file_like
-            # Clean up output temp file after streaming
-            os.unlink(output_path)
+        # Read the processed audio file into memory
+        with open(output_path, 'rb') as f:
+            audio_bytes = f.read()
+        
+        # Clean up output temp file
+        os.unlink(output_path)
 
-        # Return a streaming response
-        return StreamingResponse(
-            iterfile(),
-            media_type="audio/wav",
-            headers={
-                "Content-Disposition": f"attachment; filename=processed_audio.wav"
-            }
-        )
+        # Convert both audio and plot to base64
+        audio_b64 = base64.b64encode(audio_bytes).decode('utf-8')
+        plot_b64 = base64.b64encode(plot_bytes).decode('utf-8')
+
+        # Return JSON with both audio and plot data
+        return JSONResponse({
+            "audio": f"data:audio/wav;base64,{audio_b64}",
+            "plot": f"data:image/png;base64,{plot_b64}"
+        })
         
     except Exception as e:
         # Clean up temporary files in case of error
         if os.path.exists(temp_file_path):
             os.unlink(temp_file_path)
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return JSONResponse(
+            status_code=500,
+            content={
+                "status": "error",
+                "message": str(e)
+            }
+        )
 
 if __name__ == "__main__":
     import uvicorn

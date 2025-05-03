@@ -28,6 +28,7 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedAudio, setProcessedAudio] = useState<string | null>(null);
+  const [plotImage, setPlotImage] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +42,9 @@ export default function Home() {
     if (!selectedFile && !selectedSample) return;
     
     setIsProcessing(true);
+    setProcessedAudio(null);
+    setPlotImage(null);
+    
     try {
       const formData = new FormData();
       
@@ -74,10 +78,18 @@ export default function Home() {
         throw new Error('Failed to process audio');
       }
 
-      // Handle streaming response
-      const blob = await response.blob();
-      const audioUrl = URL.createObjectURL(blob);
+      // Handle multipart response
+      const data = await response.json();
+      
+      // Set processed audio
+      const audioBlob = await fetch(data.audio).then(r => r.blob());
+      const audioUrl = URL.createObjectURL(audioBlob);
       setProcessedAudio(audioUrl);
+      
+      // Set plot image
+      const plotBlob = await fetch(data.plot).then(r => r.blob());
+      const plotUrl = URL.createObjectURL(plotBlob);
+      setPlotImage(plotUrl);
       
     } catch (error) {
       console.error('Processing failed:', error);
@@ -120,6 +132,7 @@ export default function Home() {
                   setSelectedSample(sample.id);
                   setSelectedFile(null);
                   setProcessedAudio(null);
+                  setPlotImage(null);
                 }}
               >
                 <h4 className="font-medium mb-1">{sample.name}</h4>
@@ -156,6 +169,8 @@ export default function Home() {
                       e.stopPropagation();
                       setSelectedFile(null);
                       setSelectedSample(null);
+                      setProcessedAudio(null);
+                      setPlotImage(null);
                     }}
                     className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                   >
@@ -186,29 +201,43 @@ export default function Home() {
               </button>
 
               {processedAudio && (
-                <div className="mt-8 p-4 bg-gray-50 rounded border border-gray-200">
-                  <audio 
-                    controls 
-                    className="w-full"
-                    src={processedAudio}
-                  >
-                    Your browser does not support the audio element.
-                  </audio>
-                  <div className="mt-4 flex justify-center">
-                    <button
-                      onClick={() => {
-                        const downloadUrl = document.createElement('a');
-                        downloadUrl.href = processedAudio;
-                        downloadUrl.download = 'processed_audio.wav';
-                        document.body.appendChild(downloadUrl);
-                        downloadUrl.click();
-                        document.body.removeChild(downloadUrl);
-                      }}
-                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+                <div className="mt-8 space-y-8">
+                  <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                    <h3 className="text-lg font-medium mb-4">Processed Audio</h3>
+                    <audio 
+                      controls 
+                      className="w-full"
+                      src={processedAudio}
                     >
-                      Download Processed Audio
-                    </button>
+                      Your browser does not support the audio element.
+                    </audio>
+                    <div className="mt-4 flex justify-center">
+                      <button
+                        onClick={() => {
+                          const downloadUrl = document.createElement('a');
+                          downloadUrl.href = processedAudio;
+                          downloadUrl.download = 'processed_audio.wav';
+                          document.body.appendChild(downloadUrl);
+                          downloadUrl.click();
+                          document.body.removeChild(downloadUrl);
+                        }}
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+                      >
+                        Download Processed Audio
+                      </button>
+                    </div>
                   </div>
+
+                  {plotImage && (
+                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                      <h3 className="text-lg font-medium mb-4"></h3>
+                      <img 
+                        src={plotImage} 
+                        alt="Signal analysis plot"
+                        className="w-full h-auto rounded"
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>

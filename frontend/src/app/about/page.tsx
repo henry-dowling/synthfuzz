@@ -10,7 +10,7 @@ export default function About() {
         {/* Header */}
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-6">
-            About Real Boy
+            About
           </h1>
           <div className="flex justify-center space-x-4 text-sm">
             <Link href="/" className="text-blue-600 hover:underline">Home</Link>

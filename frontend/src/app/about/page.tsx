@@ -14,7 +14,7 @@ export default function About() {
           </h1>
           <div className="flex justify-center space-x-4 text-sm">
             <Link href="/" className="text-blue-600 hover:underline">Home</Link>
-            <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Code</a>
+            <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Code</a>
           </div>
         </header>
 
@@ -33,13 +33,13 @@ export default function About() {
           <div className="space-y-6">
             <p>
               Real Boy was created by{" "}
-              <a href="https://github.com/abcdchop" className="text-blue-600 hover:underline">Chris</a>
+              <a href="https://github.com/abcdchop" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Chris</a>
               {" "}and{" "}
-              <a href="https://github.com/henry-dowling" className="text-blue-600 hover:underline">Henry</a> in NYC. 
+              <a href="https://github.com/henry-dowling" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Henry</a> in NYC. 
               You can find us on{" "}
-              <a href="https://open.spotify.com/artist/4KteP8o6Au9QpDXO14xtWu?si=zg4FfkZuT_GYgIYuhJdqlg" className="text-blue-600 hover:underline">Spotify</a>
+              <a href="https://open.spotify.com/artist/4KteP8o6Au9QpDXO14xtWu?si=zg4FfkZuT_GYgIYuhJdqlg" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Spotify</a>
               {" "}here and{" "}
-              <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Github</a>
+              <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Github</a>
               {" "}here.
             </p>
 

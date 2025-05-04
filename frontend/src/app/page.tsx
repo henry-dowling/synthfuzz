@@ -125,7 +125,6 @@ export default function Home() {
           <div className="flex justify-center space-x-4 text-sm">
             <Link href="/about" className="text-blue-600 hover:underline">About</Link>
             <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Code</a>
-            <a href="#" className="text-blue-600 hover:underline">Purchase</a>
           </div>
         </header>
 

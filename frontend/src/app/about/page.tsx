@@ -15,7 +15,7 @@ export default function About() {
           <div className="flex justify-center space-x-4 text-sm">
             <Link href="/" className="text-blue-600 hover:underline">Home</Link>
             <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Code</a>
-            <a href="#" className="text-blue-600 hover:underline">Purchase</a>
+
           </div>
         </header>
 
@@ -23,40 +23,39 @@ export default function About() {
         <div className="prose max-w-none">
           <div className="flex justify-center mb-12">
             <Image
-              src="/icon.png"
-              alt="Real Boy Synth Icon"
-              width={120}
-              height={120}
+              src="/henry-chris.jpg"
+              alt="Henry and Chris"
+              width={600}
+              height={400}
+              className="rounded-lg shadow-lg"
             />
           </div>
 
           <div className="space-y-6">
             <p>
-              Real Boy is an experimental guitar synth pedal that preserves the rich harmonic content 
-              of your guitar's sound. Unlike traditional synth pedals that reduce your guitar's 
-              complex waveform to simple parameters, Real Boy captures and synthesizes the subtle 
-              nuances that make your instrument unique.
+              Real Boy was created by{" "}
+              <a href="https://github.com/abcdchop" className="text-blue-600 hover:underline">Chris</a>
+              {" "}and{" "}
+              <a href="https://github.com/henry-dowling" className="text-blue-600 hover:underline">Henry</a> in NYC. 
+              You can find us on{" "}
+              <a href="https://open.spotify.com/artist/4KteP8o6Au9QpDXO14xtWu?si=zg4FfkZuT_GYgIYuhJdqlg" className="text-blue-600 hover:underline">Spotify</a>
+              {" "}here and{" "}
+              <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Github</a>
+              {" "}here.
             </p>
 
-            <p>
-              Using advanced signal processing techniques inspired by bitcrushing and iterative 
-              approximation, Real Boy creates a high-fidelity digital representation of your 
-              guitar's sound that can be manipulated using modular synthesis techniques.
-            </p>
+            
 
-            <p>
-              The result is a synth pedal that doesn't just track your playing—it understands 
-              and preserves the character of your instrument while opening up new sonic possibilities.
-            </p>
-
-            <div className="mt-12 text-sm text-gray-600">
-              <p>
-                Created by Henry Dowling
-              </p>
-              <p>
-                For inquiries: <a href="mailto:contact@example.com" className="text-blue-600 hover:underline">contact@example.com</a>
-              </p>
+            <div className="flex justify-center my-12">
+              <Image
+                src="/icon.png"
+                alt="Real Boy Synth Icon"
+                width={120}
+                height={120}
+              />
             </div>
+
+          
           </div>
         </div>
       </div>

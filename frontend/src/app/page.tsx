@@ -361,7 +361,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-600 mb-4">
-                  Why do this? Well, firstly, the approximation can be used as a standalone synth fuzz pedal (see demo above). 
+                  Why do this? Well, firstly, the approximation can be used as a standalone synth fuzz pedal (shown above). 
                   But more importantly, it gives us <strong>discrete but detailed</strong> data about the guitar&apos;s waveform. That 
                   data can then be used to <strong>resynthesize</strong> the signal using modular synth techniques—with far more 
                   fidelity than typical pitch/frequency detectors.

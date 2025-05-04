@@ -310,6 +310,27 @@ export default function Home() {
 
                 <div className="my-8">
                   <Image 
+                    src="/graphs/bitcrusher-ex.png" 
+                    alt="Bitcrusher signal approximation"
+                    width={800}
+                    height={400}
+                    className="w-full rounded-lg shadow-lg"
+                  />
+                  <p className="text-sm text-gray-500 mt-2 text-center">
+                    A bitcrusher approximates a signal by quantizing it into discrete steps
+                  </p>
+                </div>
+
+                <p className="text-gray-600 mb-4">
+                  We take this a step further. Instead of fixed steps, The Real Boy can dynamically adjust the approximation based 
+                  on the incoming waveform. One way to do this is by starting with a square wave approximation, then calculating 
+                  the difference (error) between the original and the approximation, and repeating the process. This iterative 
+                  refinement captures more of the waveform&apos;s complexity—producing something between a classic bitcrusher and a 
+                  smarter signal encoder.
+                </p>
+
+                <div className="my-8">
+                  <Image 
                     src="/graphs/bircrusher-vs-iter.png" 
                     alt="Iterative signal approximation comparison"
                     width={800}
@@ -320,6 +341,13 @@ export default function Home() {
                     The Real Boy&apos;s iterative approximation (right) captures more detail than a standard bitcrusher (left)
                   </p>
                 </div>
+
+                <p className="text-gray-600 mb-4">
+                  Why do this? Well, firstly, the approximation can be used as a standalone synth fuzz pedal (see demo above). 
+                  But more importantly, it gives us <strong>discrete but detailed</strong> data about the guitar&apos;s waveform. That 
+                  data can then be used to <strong>resynthesize</strong> the signal using modular synth techniques—with far more 
+                  fidelity than typical pitch/frequency detectors.
+                </p>
 
                 <p className="text-gray-600 mb-4">
                   We can be a bit more clever, and use a different algorithm—approximating the wave as a square wave, then adding 

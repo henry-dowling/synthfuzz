@@ -356,7 +356,7 @@ export default function Home() {
                     className="w-full rounded"
                   />
                   <p className="text-sm text-gray-500 mt-2 text-center">
-                    The Real Boy&apos;s iterative approximation (right) captures more detail than a standard bitcrusher (left)
+                    The Real Boy&apos;s iterative approximation captures more detail than a standard bitcrusher 
                   </p>
                 </div>
 

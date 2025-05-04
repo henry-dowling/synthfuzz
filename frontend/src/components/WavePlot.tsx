@@ -46,15 +46,16 @@ export function WavePlot({ alpha = 2, width = 640, height = 400 }: WavePlotProps
     });
 
     // Render the plot
-    if (containerRef.current) {
-      containerRef.current.innerHTML = '';
-      containerRef.current.appendChild(plot);
+    const container = containerRef.current;
+    if (container) {
+      container.innerHTML = '';
+      container.appendChild(plot);
     }
 
     // Cleanup
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = '';
+      if (container) {
+        container.innerHTML = '';
       }
     };
   }, [alpha, width, height]);

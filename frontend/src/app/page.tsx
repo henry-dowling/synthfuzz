@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Math } from "../components/Math";
-import { WavePlot } from "../components/WavePlot";
 import { FMSynthDemo } from "../components/FMSynthDemo";
 
 // Sample audio data
@@ -35,7 +35,6 @@ export default function Home() {
   const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>('electric');
   const [isFaqOpen, setIsFaqOpen] = useState(false);
-  const [distortionAmount, setDistortionAmount] = useState(2);
   const [isFMDemoOpen, setIsFMDemoOpen] = useState(false);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,9 +247,11 @@ export default function Home() {
                   {fullPlot && (
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
                       <h3 className="text-lg font-medium mb-4">Full Signal Analysis</h3>
-                      <img 
+                      <Image 
                         src={fullPlot} 
                         alt="Full signal analysis plot"
+                        width={800}
+                        height={400}
                         className="w-full h-auto rounded"
                       />
                     </div>
@@ -259,9 +260,11 @@ export default function Home() {
                   {zoomedPlot && (
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
                       <h3 className="text-lg font-medium mb-4">Zoomed-in Signal Analysis</h3>
-                      <img 
+                      <Image 
                         src={zoomedPlot} 
                         alt="Zoomed signal analysis plot"
+                        width={800}
+                        height={400}
                         className="w-full h-auto rounded"
                       />
                     </div>
@@ -294,69 +297,45 @@ export default function Home() {
               <div className="mb-8">
                 <p className="text-gray-600 mb-4">
                   The <strong>Real Boy</strong> is a concept for a modular synth pedal that preserves the rich upper harmonies 
-                  of the guitar. Unlike most synth pedals, it captures information about the guitar's sound besides just its 
+                  of the guitar. Unlike most synth pedals, it captures information about the guitar&apos;s sound besides just its 
                   fundamental frequency.
                 </p>
 
                 <p className="text-gray-600 mb-4">
                   At its core, The Real Boy uses a technique inspired by <strong>bitcrushing</strong>, a method of digital signal 
                   approximation that generalizes square wave approximation. A typical bitcrusher reduces the resolution of a signal 
-                  by dividing the amplitude range into discrete steps—then rounding the actual signal to the nearest step. It's 
-                  essentially "pixellation" of a sound wave.
+                  by dividing the amplitude range into discrete steps—then rounding the actual signal to the nearest step. It&apos;s 
+                  essentially &quot;pixellation&quot; of a sound wave.
                 </p>
 
                 <div className="my-8">
-                  <img 
-                    src="/graphs/bitcrusher-ex.png" 
-                    alt="Bitcrusher signal approximation"
-                    className="w-full rounded-lg shadow-lg"
-                  />
-                  <p className="text-sm text-gray-500 mt-2 text-center">
-                    A bitcrusher approximates a signal by quantizing it into discrete steps
-                  </p>
-                </div>
-
-                <p className="text-gray-600 mb-4">
-                  We take this a step further. Instead of fixed steps, The Real Boy can dynamically adjust the approximation based 
-                  on the incoming waveform. One way to do this is by starting with a square wave approximation, then calculating 
-                  the difference (error) between the original and the approximation, and repeating the process. This iterative 
-                  refinement captures more of the waveform's complexity—producing something between a classic bitcrusher and a 
-                  smarter signal encoder.
-                </p>
-
-                <div className="my-8">
-                  <img 
+                  <Image 
                     src="/graphs/bircrusher-vs-iter.png" 
                     alt="Iterative signal approximation comparison"
+                    width={800}
+                    height={400}
                     className="w-full rounded-lg shadow-lg"
                   />
                   <p className="text-sm text-gray-500 mt-2 text-center">
-                    The Real Boy's iterative approximation (right) captures more detail than a standard bitcrusher (left)
+                    The Real Boy&apos;s iterative approximation (right) captures more detail than a standard bitcrusher (left)
                   </p>
                 </div>
-
-                <p className="text-gray-600 mb-4">
-                  Why do this? Well, firstly, the approximation can be used as a standalone synth fuzz pedal (see demo above). 
-                  But more importantly, it gives us <strong>discrete but detailed</strong> data about the guitar's waveform. That 
-                  data can then be used to <strong>resynthesize</strong> the signal using modular synth techniques—with far more 
-                  fidelity than typical pitch/frequency detectors.
-                </p>
 
                 <p className="text-gray-600 mb-4">
                   We can be a bit more clever, and use a different algorithm—approximating the wave as a square wave, then adding 
-                  the error to that square wave, and so on to create a signal that's similar to the bitcrusher but where the 
+                  the error to that square wave, and so on to create a signal that&apos;s similar to the bitcrusher but where the 
                   <strong>buckets are dynamically</strong> sized.
                 </p>
 
-                <h3 className="text-xl font-semibold mt-8 mb-3">Modular Synths Don't Normally Work On Guitars</h3>
+                <h3 className="text-xl font-semibold mt-8 mb-3">Modular Synths Don&apos;t Normally Work On Guitars</h3>
                 <p className="text-gray-600 mb-4">
                   Most modular synths expect clean, mathematically defined waveforms—like sine, square, or saw waves. These 
                   waveforms are easy to modulate, because we know their exact formulas.
                 </p>
 
                 <p className="text-gray-600 mb-4">
-                  This is unfortunate, because when you play guitar you don't know the exact function that produced its output—only 
-                  that it's full of harmonic richness, string resonance, amplifier coloration, and environmental noise. Even if you 
+                  This is unfortunate, because when you play guitar you don&apos;t know the exact function that produced its output—only 
+                  that it&apos;s full of harmonic richness, string resonance, amplifier coloration, and environmental noise. Even if you 
                   know the fundamental (say, 110 Hz on the A string), you have no idea what the actual waveform looks like in detail. 
                   That waveform is shaped by your fingers, your gear, your strings, your pickups, even the humidity.
                 </p>
@@ -368,7 +347,7 @@ export default function Home() {
 
                 <p className="text-gray-600 mb-4">
                   This works, but at a cost: you lose nearly all the complexity that makes a guitar sound like a guitar. The upper 
-                  harmonics, subtle dynamics, and expressiveness vanish. It's no longer your guitar—it's just a sine wave with a 
+                  harmonics, subtle dynamics, and expressiveness vanish. It&apos;s no longer your guitar—it&apos;s just a sine wave with a 
                   pitch tracker.
                 </p>
 
@@ -398,7 +377,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-600 mb-4">
-                  Here's what the waveform would look like if we added a modulator whose frequency is also 440. We say that 
+                  Here&apos;s what the waveform would look like if we added a modulator whose frequency is also 440. We say that 
                   this modulator has a <strong>harmonic ratio</strong> of 1 (integer harmonic ratios tend to sound much better).
                 </p>
 

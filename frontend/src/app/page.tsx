@@ -367,12 +367,6 @@ export default function Home() {
                   fidelity than typical pitch/frequency detectors.
                 </p>
 
-                <p className="text-gray-600 mb-4">
-                  We can be a bit more clever, and use a different algorithm—approximating the wave as a square wave, then adding 
-                  the error to that square wave, and so on to create a signal that&apos;s similar to the bitcrusher but where the 
-                  <strong>buckets are dynamically</strong> sized.
-                </p>
-
                 <h3 className="text-xl font-semibold mt-8 mb-3">Modular Synths Don&apos;t Normally Work On Guitars</h3>
                 <p className="text-gray-600 mb-4">
                   Most modular synths expect clean, mathematically defined waveforms—like sine, square, or saw waves. These 
@@ -439,7 +433,7 @@ export default function Home() {
                   <a href="https://www.youtube.com/watch?v=dzBhGheAIYo" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
                     Yamaha DX-7
                   </a>.
-                  You can try it out below. 
+                  Try it out below. 
                 </p>
 
                 <div className="mt-4">

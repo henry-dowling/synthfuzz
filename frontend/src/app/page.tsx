@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Math } from "../components/Math";
 import { WavePlot } from "../components/WavePlot";
+import { FMSynthDemo } from "../components/FMSynthDemo";
 
 // Sample audio data
 const SAMPLE_AUDIO_FILES = [
@@ -32,9 +33,10 @@ export default function Home() {
   const [processedAudio, setProcessedAudio] = useState<string | null>(null);
   const [fullPlot, setFullPlot] = useState<string | null>(null);
   const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
-  const [selectedSample, setSelectedSample] = useState<string | null>(null);
+  const [selectedSample, setSelectedSample] = useState<string | null>('electric');
   const [isFaqOpen, setIsFaqOpen] = useState(false);
   const [distortionAmount, setDistortionAmount] = useState(2);
+  const [isFMDemoOpen, setIsFMDemoOpen] = useState(false);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -120,7 +122,7 @@ export default function Home() {
           </div>
           <div className="flex justify-center space-x-4 text-sm">
             <a href="#" className="text-blue-600 hover:underline">About</a>
-            <a href="https://github.com/yourusername/synthfuzz" className="text-blue-600 hover:underline">Code</a>
+            <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Code</a>
             <a href="#" className="text-blue-600 hover:underline">Purchase</a>
           </div>
         </header>
@@ -289,11 +291,52 @@ export default function Home() {
           
           {isFaqOpen && (
             <div className="prose max-w-none">
-              <p className="text-gray-600">
-                The Real Boy pedal uses advanced digital signal processing to create its unique fuzz sound. At its core, it applies a combination of waveshaping and filtering techniques:
-              </p>
-              
-              <h3 className="text-xl font-semibold mt-4">Waveshaping</h3>
+              <div className="mb-8">
+                <div className="mb-6">
+                  <button
+                    onClick={() => setIsFMDemoOpen(!isFMDemoOpen)}
+                    className="w-full text-left flex justify-between items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                  >
+                    <div>
+                      <h3 className="text-xl font-semibold text-blue-900 mb-1">Interactive: FM Synthesis Explorer</h3>
+                      <p className="text-sm text-blue-700">
+                        Experiment with frequency modulation synthesis to understand how complex timbres are created
+                      </p>
+                    </div>
+                    <svg
+                      className={`w-6 h-6 transform transition-transform ${isFMDemoOpen ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {isFMDemoOpen && (
+                    <div className="mt-4">
+                      <p className="text-gray-600 mb-6">
+                        Experience the magic of modular synthesis right in your browser! Below is an interactive demonstration 
+                        of frequency modulation (FM) synthesis - one of the core techniques that gives the Real Boy pedal its unique character.
+                      </p>
+                      
+                      <FMSynthDemo />
+                      
+                      <div className="mt-6">
+                        <h4 className="text-lg font-semibold">Understanding FM Synthesis</h4>
+                        <p className="text-gray-600">
+                          In FM synthesis, we use one oscillator (the modulator) to change the frequency of another oscillator 
+                          (the carrier). The carrier frequency determines the base pitch, while the modulator frequency affects 
+                          the timbre. The modulation index controls how dramatic this effect is - higher values create more 
+                          complex, rich sounds. Try adjusting the controls above to create your own unique sounds!
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <h3 className="text-xl font-semibold mt-8">Waveshaping</h3>
               <p className="text-gray-600">
                 The input signal <Math math="x(t)" /> is transformed using a non-linear transfer function that creates harmonically rich distortion. The basic waveshaping function is:
               </p>
@@ -325,7 +368,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <h3 className="text-xl font-semibold mt-4">Frequency Analysis</h3>
+              <h3 className="text-xl font-semibold mt-8">Frequency Analysis</h3>
               <p className="text-gray-600">
                 We analyze the frequency content using the Fourier transform:
               </p>

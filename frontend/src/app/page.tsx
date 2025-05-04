@@ -195,7 +195,7 @@ export default function Home() {
           {(selectedFile !== null || selectedSample !== null || isUploadMode) && (
             <div className="text-center font-mono">
               <div className="mb-6 max-w-md mx-auto">
-                <div className="mb-1">Iteration depth: {iterations}</div>
+                <div className="mb-1">Iteration depth: {iterations}{iterations === 1 ? " (loud)" : ""}</div>
                 <div className="flex items-center justify-center">
                   <input
                     type="range"

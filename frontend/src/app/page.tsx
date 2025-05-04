@@ -130,6 +130,14 @@ export default function Home() {
 
         {/* Demo Section */}
         <section className="mb-12">
+          <div className="flex justify-center mb-12">
+            <Image
+              src="/icon.png"
+              alt="Real Boy Synth Icon"
+              width={150}
+              height={150}
+            />
+          </div>
           <h2 className="text-2xl font-bold mb-8">Select an Audio Example</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

@@ -138,42 +138,49 @@ export default function Home() {
               height={150}
             />
           </div>
-          <h2 className="text-2xl font-bold mb-8">Select an Audio Example</h2>
+          <h2 className="text-2xl font-bold mb-8">Audio Examples:</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="space-y-2 max-w-2xl mx-auto mb-8 font-mono">
             {SAMPLE_AUDIO_FILES.map((sample) => (
-              <div
+              <label
                 key={sample.id}
-                className={`p-4 rounded-lg border transition-all cursor-pointer ${
-                  selectedSample === sample.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
-                }`}
-                onClick={() => {
-                  setSelectedSample(sample.id);
-                  setSelectedFile(null);
-                  setProcessedAudio(null);
-                  setFullPlot(null);
-                  setZoomedPlot(null);
-                }}
+                className="block cursor-pointer"
               >
-                <h4 className="font-medium mb-1">{sample.name}</h4>
-                <p className="text-sm text-gray-600 mb-3">{sample.description}</p>
-                {selectedSample === sample.id && (
-                  <audio className="w-full" controls src={sample.path}>
-                    Your browser does not support the audio element.
-                  </audio>
-                )}
-              </div>
+                <span className="inline-flex items-center">
+                  <span className="mr-2">[{selectedSample === sample.id ? "x" : " "}]</span>
+                  <input
+                    type="radio"
+                    name="audioExample"
+                    value={sample.id}
+                    checked={selectedSample === sample.id}
+                    onChange={() => {
+                      setSelectedSample(sample.id);
+                      setSelectedFile(null);
+                      setProcessedAudio(null);
+                      setFullPlot(null);
+                      setZoomedPlot(null);
+                    }}
+                    className="sr-only"
+                  />
+                  {sample.name} – {sample.description}
+                </span>
+              </label>
             ))}
 
-            {/* Upload Card */}
-            <div
-              className={`p-4 rounded-lg border transition-all cursor-pointer ${
-                selectedFile ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
-              }`}
-              onClick={() => document.getElementById('fileInput')?.click()}
-            >
+            {/* Upload option */}
+            <label className="block cursor-pointer">
+              <span className="inline-flex items-center">
+                <span className="mr-2">[{selectedFile ? "x" : " "}]</span>
+                <input
+                  type="radio"
+                  name="audioExample"
+                  checked={selectedFile !== null}
+                  onChange={() => document.getElementById('fileInput')?.click()}
+                  className="sr-only"
+                />
+                Upload your own
+                {selectedFile && <span className="ml-1">– {selectedFile.name}</span>}
+              </span>
               <input
                 type="file"
                 id="fileInput"
@@ -181,32 +188,7 @@ export default function Home() {
                 className="hidden"
                 onChange={handleFileSelect}
               />
-              {selectedFile ? (
-                <>
-                  <h4 className="font-medium mb-1">Selected File</h4>
-                  <p className="text-sm text-gray-600 mb-2">{selectedFile.name}</p>
-                  <p className="text-xs text-gray-500 mb-3">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedFile(null);
-                      setSelectedSample(null);
-                      setProcessedAudio(null);
-                      setFullPlot(null);
-                      setZoomedPlot(null);
-                    }}
-                    className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
-                  >
-                    Choose different file
-                  </button>
-                </>
-              ) : (
-                <div className="text-center">
-                  <h4 className="font-medium mb-1">Upload Audio</h4>
-                  <p className="text-sm text-gray-600">Click to choose an audio file.</p>
-                </div>
-              )}
-            </div>
+            </label>
           </div>
 
           {(selectedFile || selectedSample) && (

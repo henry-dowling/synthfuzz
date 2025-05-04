@@ -125,7 +125,7 @@ export default function Home() {
           </div>
           <div className="flex justify-center space-x-4 text-sm">
             <Link href="/about" className="text-blue-600 hover:underline">About</Link>
-            <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Code</a>
+            <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Code</a>
           </div>
         </header>
 
@@ -335,7 +335,7 @@ export default function Home() {
                 </p>
 
                 <p className="text-gray-600 mb-4">
-                  At its core, The Real Boy uses a technique inspired by <strong>bitcrushing</strong>, a method of digital signal 
+                  At its core, The Real Boy uses a technique inspired by <a href="https://en.wikipedia.org/wiki/Bitcrusher" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer"><strong>bitcrushing</strong></a>, a method of digital signal 
                   approximation that generalizes square wave approximation. A typical bitcrusher reduces the resolution of a signal 
                   by dividing the amplitude range into discrete steps—then rounding the actual signal to the nearest step. It&apos;s 
                   essentially &quot;pixellation&quot; of a sound wave.

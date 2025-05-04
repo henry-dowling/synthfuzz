@@ -11,7 +11,7 @@ const SAMPLE_AUDIO_FILES = [
   {
     id: 'electric',
     name: 'Electric Guitar',
-    description: 'Straten Marshall',
+    description: 'PStraten Marshall',
     path: '/audio-samples/shred.mp3'
   },
   {
@@ -37,6 +37,7 @@ export default function Home() {
   const [selectedSample, setSelectedSample] = useState<string | null>('electric');
   const [isFaqOpen, setIsFaqOpen] = useState(false);
   const [iterations, setIterations] = useState<number>(4); // Default to 4 iterations
+  const [isUploadMode, setIsUploadMode] = useState(false); // New state for upload mode
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -147,15 +148,16 @@ export default function Home() {
                 className="block cursor-pointer"
               >
                 <span className="inline-flex items-center">
-                  <span className="mr-2">[{selectedSample === sample.id ? "x" : " "}]</span>
+                  <span className="mr-2">[{selectedSample === sample.id && !isUploadMode ? "x" : " "}]</span>
                   <input
                     type="radio"
                     name="audioExample"
                     value={sample.id}
-                    checked={selectedSample === sample.id}
+                    checked={selectedSample === sample.id && !isUploadMode}
                     onChange={() => {
                       setSelectedSample(sample.id);
                       setSelectedFile(null);
+                      setIsUploadMode(false);
                       setProcessedAudio(null);
                       setFullPlot(null);
                       setZoomedPlot(null);
@@ -170,12 +172,16 @@ export default function Home() {
             {/* Upload option */}
             <label className="block cursor-pointer">
               <span className="inline-flex items-center">
-                <span className="mr-2">[{selectedFile ? "x" : " "}]</span>
+                <span className="mr-2">[{isUploadMode ? "x" : " "}]</span>
                 <input
                   type="radio"
                   name="audioExample"
-                  checked={selectedFile !== null}
-                  onChange={() => document.getElementById('fileInput')?.click()}
+                  checked={isUploadMode}
+                  onChange={() => {
+                    setIsUploadMode(true);
+                    setSelectedSample(null);
+                    document.getElementById('fileInput')?.click();
+                  }}
                   className="sr-only"
                 />
                 Upload your own
@@ -186,12 +192,20 @@ export default function Home() {
                 id="fileInput"
                 accept="audio/*"
                 className="hidden"
-                onChange={handleFileSelect}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setSelectedFile(file);
+                    setSelectedSample(null);
+                    setIsUploadMode(true);
+                  }
+                }}
               />
             </label>
           </div>
 
-          {(selectedFile || selectedSample) && (
+          {/* Show UI when either a file is selected, sample is selected, or we're in upload mode */}
+          {(selectedFile !== null || selectedSample !== null || isUploadMode) && (
             <div className="text-center">
               <div className="mb-6 max-w-md mx-auto font-mono">
                 <div className="mb-2">Iteration depth: {iterations}</div>

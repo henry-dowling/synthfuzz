@@ -15,7 +15,6 @@ export default function About() {
           <div className="flex justify-center space-x-4 text-sm">
             <Link href="/" className="text-blue-600 hover:underline">Home</Link>
             <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline">Code</a>
-
           </div>
         </header>
 
@@ -44,8 +43,6 @@ export default function About() {
               {" "}here.
             </p>
 
-            
-
             <div className="flex justify-center my-12">
               <Image
                 src="/icon.png"
@@ -54,8 +51,6 @@ export default function About() {
                 height={120}
               />
             </div>
-
-          
           </div>
         </div>
       </div>

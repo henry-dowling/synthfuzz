@@ -11,7 +11,7 @@ const SAMPLE_AUDIO_FILES = [
   {
     id: 'electric',
     name: 'Electric Guitar',
-    description: 'PStraten Marshall',
+    description: 'Straten Marshall',
     path: '/audio-samples/shred.mp3'
   },
   {

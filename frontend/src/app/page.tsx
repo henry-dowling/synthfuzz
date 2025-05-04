@@ -123,8 +123,9 @@ export default function Home() {
           <h1 className="text-4xl font-bold mb-6">
             Real Boy: High-Fidelity Fuzz Pedal for Synth
           </h1>
-          <div className="mb-8">
-          </div>
+          <p className="font-mono text-lg mb-8 text-gray-600">
+            A high-fidelity fuzz pedal that respects your harmonics.
+          </p>
           <div className="flex justify-center space-x-4 text-sm">
             <Link href="/about" className="text-blue-600 hover:underline">About</Link>
             <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Code</a>
@@ -133,14 +134,6 @@ export default function Home() {
 
         {/* Demo Section */}
         <section className="mb-12">
-          <div className="flex justify-center mb-12">
-            <Image
-              src="/icon.png"
-              alt="Real Boy Synth Icon"
-              width={150}
-              height={150}
-            />
-          </div>
           <h2 className="text-2xl mb-8">Audio Examples:</h2>
           
           <div className="space-y-1 max-w-2xl mx-auto mb-12 font-mono text-base">
@@ -309,15 +302,10 @@ export default function Home() {
             onClick={() => setIsFaqOpen(!isFaqOpen)}
             className="w-full text-left flex justify-between items-center mb-4 cursor-pointer hover:text-gray-600 transition-colors"
           >
-            <h2 className="text-2xl font-bold">How it Works</h2>
-            <svg
-              className={`w-6 h-6 transform transition-transform ${isFaqOpen ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+            <h2 className="text-2xl">How it Works</h2>
+            <span className="font-mono text-xl">
+              {isFaqOpen ? '[^]' : '[v]'}
+            </span>
           </button>
           
           {isFaqOpen && (

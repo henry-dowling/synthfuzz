@@ -347,7 +347,7 @@ export default function Home() {
                     alt="Bitcrusher signal approximation"
                     width={800}
                     height={400}
-                    className="w-full rounded-lg shadow-lg"
+                    className="w-full rounded"
                   />
                   <p className="text-sm text-gray-500 mt-2 text-center">
                     A bitcrusher approximates a signal by quantizing it into discrete steps
@@ -368,7 +368,7 @@ export default function Home() {
                     alt="Iterative signal approximation comparison"
                     width={800}
                     height={400}
-                    className="w-full rounded-lg shadow-lg"
+                    className="w-full rounded"
                   />
                   <p className="text-sm text-gray-500 mt-2 text-center">
                     The Real Boy&apos;s iterative approximation (right) captures more detail than a standard bitcrusher (left)

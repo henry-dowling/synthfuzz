@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Math } from "../components/Math";
 
 // Sample audio data
 const SAMPLE_AUDIO_FILES = [
@@ -286,17 +287,36 @@ export default function Home() {
           
           {isFaqOpen && (
             <div className="prose max-w-none">
-              {/* You can fill this section with your explanation */}
               <p className="text-gray-600">
-                The 
+                The Real Boy pedal uses advanced digital signal processing to create its unique fuzz sound. At its core, it applies a combination of waveshaping and filtering techniques:
+              </p>
+              
+              <h3 className="text-xl font-semibold mt-4">Waveshaping</h3>
+              <p className="text-gray-600">
+                The input signal <Math math="x(t)" /> is transformed using a non-linear transfer function that creates harmonically rich distortion. The basic waveshaping function is:
+              </p>
+              <Math 
+                math="f(x) = \tanh(\alpha x)" 
+                block={true}
+              />
+              <p className="text-gray-600">
+                where <Math math="\alpha" /> controls the amount of distortion. Higher values create more aggressive clipping.
+              </p>
+
+              <h3 className="text-xl font-semibold mt-4">Frequency Analysis</h3>
+              <p className="text-gray-600">
+                We analyze the frequency content using the Fourier transform:
+              </p>
+              <Math 
+                math="X(f) = \int_{-\infty}^{\infty} x(t)e^{-2\pi i f t}dt" 
+                block={true}
+              />
+              <p className="text-gray-600">
+                This allows us to visualize how the pedal affects different frequency components of your signal, as shown in the plots above.
               </p>
             </div>
           )}
         </section>
-
-        <footer className="mt-16 text-center text-gray-600 text-sm">
-          <p>© 2025 Willowmere Research.</p>
-        </footer>
       </div>
     </div>
   );

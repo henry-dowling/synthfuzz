@@ -193,11 +193,9 @@ export default function Home() {
 
           {(selectedFile || selectedSample) && (
             <div className="text-center">
-              <div className="mb-6 max-w-md mx-auto">
-                <label htmlFor="iterations" className="block text-lg font-medium text-gray-900 mb-3">
-                  Square Wave Approximation Iterations: {iterations}
-                </label>
-                <div className="space-y-2">
+              <div className="mb-6 max-w-md mx-auto font-mono">
+                <div className="mb-2">Iteration depth: {iterations}</div>
+                <div className="flex items-center justify-center space-x-2">
                   <input
                     type="range"
                     id="iterations"
@@ -205,26 +203,20 @@ export default function Home() {
                     max="10"
                     value={iterations}
                     onChange={(e) => setIterations(parseInt(e.target.value))}
-                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600 hover:accent-blue-700"
+                    className="w-48 h-px bg-gray-300 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black"
                   />
-                  <p className="text-sm text-gray-600 text-center">
-                    More iterations means higher fidelity approximation of the original signal
-                  </p>
                 </div>
+                <div className="text-xs text-gray-500 mt-2">More iterations preserve harmonic detail</div>
               </div>
               <button
                 onClick={handleProcess}
                 disabled={isProcessing}
-                className={`px-6 py-2 rounded font-medium transition-all text-white ${
-                  isProcessing
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                }`}
+                className="font-mono hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isProcessing ? 'Processing...' : 'Process Audio'}
+                {isProcessing ? '... processing' : '→ Run approximation'}
               </button>
               {isProcessing && (
-                <p className="mt-4 text-sm text-gray-600">This usually takes about 60 seconds</p>
+                <p className="mt-4 text-xs text-gray-500">This usually takes about 60 seconds</p>
               )}
 
               {processedAudio && (

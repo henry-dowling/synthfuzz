@@ -194,7 +194,7 @@ export default function Home() {
           {/* Show UI when either a file is selected, sample is selected, or we're in upload mode */}
           {(selectedFile !== null || selectedSample !== null || isUploadMode) && (
             <div className="text-center font-mono">
-              <div className="mb-12 max-w-md mx-auto">
+              <div className="mb-6 max-w-md mx-auto">
                 <div className="mb-1">Iteration depth: {iterations}</div>
                 <div className="flex items-center justify-center">
                   <input
@@ -207,25 +207,27 @@ export default function Home() {
                     className="w-48 h-px bg-gray-300 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black"
                   />
                 </div>
-                <div className="text-xs text-gray-500 mt-2">More iterations preserve harmonic detail</div>
+                <div className="text-xs text-gray-500 mt-1">More iterations preserve harmonic detail</div>
               </div>
-              <button
-                onClick={handleProcess}
-                disabled={isProcessing}
-                className="font-mono hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 mb-12"
-              >
-                {isProcessing ? '... processing' : '→ Run approximation'}
-              </button>
-              {isProcessing && (
-                <p className="mt-4 text-xs text-gray-500">This usually takes about 60 seconds</p>
-              )}
+              <div className="mb-6">
+                <button
+                  onClick={handleProcess}
+                  disabled={isProcessing}
+                  className="font-mono hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isProcessing ? '... processing' : '→ Run approximation'}
+                </button>
+                {isProcessing && (
+                  <p className="mt-1 text-xs text-gray-500">This usually takes about 60 seconds</p>
+                )}
+              </div>
 
               {processedAudio && (
                 <div className="mt-8 space-y-8">
                   {/* Audio Players Section */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Input Audio */}
-                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                    <div>
                       <div className="font-mono mb-4">Input Audio</div>
                       <audio 
                         controls 
@@ -237,7 +239,7 @@ export default function Home() {
                     </div>
 
                     {/* Processed Audio */}
-                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                    <div>
                       <div className="font-mono mb-4">Processed Audio</div>
                       <audio 
                         controls 
@@ -256,7 +258,7 @@ export default function Home() {
                             downloadUrl.click();
                             document.body.removeChild(downloadUrl);
                           }}
-                          className="font-mono hover:underline cursor-pointer"
+                          className="font-mono text-gray-600 hover:underline cursor-pointer"
                         >
                           → Download result
                         </button>
@@ -266,27 +268,27 @@ export default function Home() {
 
                   {/* Signal Analysis Plots */}
                   {fullPlot && (
-                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                    <div>
                       <div className="font-mono mb-4">Full Signal Analysis</div>
                       <Image 
                         src={fullPlot} 
                         alt="Full signal analysis plot"
                         width={800}
                         height={400}
-                        className="w-full h-auto rounded"
+                        className="w-full h-auto border border-gray-200"
                       />
                     </div>
                   )}
 
                   {zoomedPlot && (
-                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                    <div>
                       <div className="font-mono mb-4">Zoomed-in Signal Analysis</div>
                       <Image 
                         src={zoomedPlot} 
                         alt="Zoomed signal analysis plot"
                         width={800}
                         height={400}
-                        className="w-full h-auto rounded"
+                        className="w-full h-auto border border-gray-200"
                       />
                     </div>
                   )}

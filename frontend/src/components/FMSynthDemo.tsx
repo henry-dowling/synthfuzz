@@ -195,13 +195,13 @@ export const FMSynthDemo: React.FC<FMSynthDemoProps> = ({
   }, [carrierFreq, harmonicRatio]);
 
   return (
-    <div className="p-6 bg-gray-50 rounded-lg">
+    <div className="p-6">
       <div className="mb-6">
         <canvas
           ref={canvasRef}
           width={width}
           height={height}
-          className="bg-white rounded-lg shadow-inner border border-gray-200"
+          className="bg-white border border-gray-200"
         />
       </div>
 
@@ -210,7 +210,7 @@ export const FMSynthDemo: React.FC<FMSynthDemoProps> = ({
           <button
             key={preset.name}
             onClick={() => applyPreset(preset)}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+            className="px-4 py-2 bg-gray-100 rounded font-mono text-gray-600 hover:underline transition-colors"
           >
             {preset.name}
           </button>
@@ -228,7 +228,7 @@ export const FMSynthDemo: React.FC<FMSynthDemoProps> = ({
             max="1000"
             value={carrierFreq}
             onChange={(e) => setCarrierFreq(Number(e.target.value))}
-            className="w-full"
+            className="w-full h-px bg-gray-300 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-600"
           />
         </div>
         
@@ -243,7 +243,7 @@ export const FMSynthDemo: React.FC<FMSynthDemoProps> = ({
             step="0.5"
             value={harmonicRatio}
             onChange={(e) => setHarmonicRatio(Number(e.target.value))}
-            className="w-full"
+            className="w-full h-px bg-gray-300 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-600"
           />
         </div>
         
@@ -258,7 +258,7 @@ export const FMSynthDemo: React.FC<FMSynthDemoProps> = ({
             step="0.1"
             value={modulationIndex}
             onChange={(e) => setModulationIndex(Number(e.target.value))}
-            className="w-full"
+            className="w-full h-px bg-gray-300 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-600"
           />
         </div>
       </div>
@@ -266,13 +266,9 @@ export const FMSynthDemo: React.FC<FMSynthDemoProps> = ({
       <div className="mt-6 text-center">
         <button
           onClick={toggleSound}
-          className={`px-6 py-2 rounded font-medium transition-all ${
-            isPlaying
-              ? 'bg-red-600 hover:bg-red-700 text-white'
-              : 'bg-blue-600 hover:bg-blue-700 text-white'
-          }`}
+          className="font-mono text-gray-600 hover:underline transition-colors"
         >
-          {isPlaying ? 'Stop Sound' : 'Play Sound'}
+          {isPlaying ? '→ Stop Sound' : '→ Play Sound'}
         </button>
       </div>
 

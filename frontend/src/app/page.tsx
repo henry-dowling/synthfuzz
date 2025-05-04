@@ -239,32 +239,49 @@ export default function Home() {
 
               {processedAudio && (
                 <div className="mt-8 space-y-8">
-                  <div className="p-4 bg-gray-50 rounded border border-gray-200">
-                    <h3 className="text-lg font-medium mb-4">Processed Audio</h3>
-                    <audio 
-                      controls 
-                      className="w-full"
-                      src={processedAudio}
-                    >
-                      Your browser does not support the audio element.
-                    </audio>
-                    <div className="mt-4 flex justify-center">
-                      <button
-                        onClick={() => {
-                          const downloadUrl = document.createElement('a');
-                          downloadUrl.href = processedAudio;
-                          downloadUrl.download = 'processed_audio.wav';
-                          document.body.appendChild(downloadUrl);
-                          downloadUrl.click();
-                          document.body.removeChild(downloadUrl);
-                        }}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+                  {/* Audio Players Section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Input Audio */}
+                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                      <h3 className="text-lg font-medium mb-4">Input Audio</h3>
+                      <audio 
+                        controls 
+                        className="w-full"
+                        src={selectedFile ? URL.createObjectURL(selectedFile) : selectedSample ? SAMPLE_AUDIO_FILES.find(s => s.id === selectedSample)?.path : undefined}
                       >
-                        Download Processed Audio
-                      </button>
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+
+                    {/* Processed Audio */}
+                    <div className="p-4 bg-gray-50 rounded border border-gray-200">
+                      <h3 className="text-lg font-medium mb-4">Processed Audio</h3>
+                      <audio 
+                        controls 
+                        className="w-full"
+                        src={processedAudio}
+                      >
+                        Your browser does not support the audio element.
+                      </audio>
+                      <div className="mt-4 flex justify-center">
+                        <button
+                          onClick={() => {
+                            const downloadUrl = document.createElement('a');
+                            downloadUrl.href = processedAudio;
+                            downloadUrl.download = 'processed_audio.wav';
+                            document.body.appendChild(downloadUrl);
+                            downloadUrl.click();
+                            document.body.removeChild(downloadUrl);
+                          }}
+                          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+                        >
+                          Download Processed Audio
+                        </button>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Signal Analysis Plots */}
                   {fullPlot && (
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
                       <h3 className="text-lg font-medium mb-4">Full Signal Analysis</h3>

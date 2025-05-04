@@ -43,6 +43,8 @@ export default function Home() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+      setSelectedSample(null);
+      setIsUploadMode(true);
     }
   };
 
@@ -191,14 +193,7 @@ export default function Home() {
                 id="fileInput"
                 accept="audio/*"
                 className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    setSelectedFile(file);
-                    setSelectedSample(null);
-                    setIsUploadMode(true);
-                  }
-                }}
+                onChange={handleFileSelect}
               />
             </label>
           </div>

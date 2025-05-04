@@ -33,7 +33,7 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
             {
                 'type': 'iterative',
                 'function': square_wave_maker,
-                'iterations': 1
+                'iterations': 4
             }
         ]
     

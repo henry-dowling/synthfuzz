@@ -116,7 +116,7 @@ export default function Home() {
         {/* Paper Header */}
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-6">
-            Real Boy: High-Fidelity Synth Fuzz Pedal
+            Real Boy: High-Fidelity Fuzz Pedal for Synth
           </h1>
           <div className="mb-8">
           </div>
@@ -129,7 +129,7 @@ export default function Home() {
 
         {/* Demo Section */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-8">Select an Audio Input</h2>
+          <h2 className="text-2xl font-bold mb-8">Select an Audio Example</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {SAMPLE_AUDIO_FILES.map((sample) => (
@@ -278,7 +278,7 @@ export default function Home() {
             onClick={() => setIsFaqOpen(!isFaqOpen)}
             className="w-full text-left flex justify-between items-center mb-4 cursor-pointer hover:text-gray-600 transition-colors"
           >
-            <h2 className="text-2xl font-bold">How Does It Work?</h2>
+            <h2 className="text-2xl font-bold">How it Works</h2>
             <svg
               className={`w-6 h-6 transform transition-transform ${isFaqOpen ? 'rotate-180' : ''}`}
               fill="none"
@@ -292,6 +292,130 @@ export default function Home() {
           {isFaqOpen && (
             <div className="prose max-w-none">
               <div className="mb-8">
+                <p className="text-gray-600 mb-4">
+                  The <strong>Real Boy</strong> is a concept for a modular synth pedal that preserves the rich upper harmonies 
+                  of the guitar. Unlike most synth pedals, it captures information about the guitar's sound besides just its 
+                  fundamental frequency.
+                </p>
+
+                <p className="text-gray-600 mb-4">
+                  At its core, The Real Boy uses a technique inspired by <strong>bitcrushing</strong>, a method of digital signal 
+                  approximation that generalizes square wave approximation. A typical bitcrusher reduces the resolution of a signal 
+                  by dividing the amplitude range into discrete steps—then rounding the actual signal to the nearest step. It's 
+                  essentially "pixellation" of a sound wave.
+                </p>
+
+                <div className="my-8">
+                  <img 
+                    src="/graphs/bitcrusher-ex.png" 
+                    alt="Bitcrusher signal approximation"
+                    className="w-full rounded-lg shadow-lg"
+                  />
+                  <p className="text-sm text-gray-500 mt-2 text-center">
+                    A bitcrusher approximates a signal by quantizing it into discrete steps
+                  </p>
+                </div>
+
+                <p className="text-gray-600 mb-4">
+                  We take this a step further. Instead of fixed steps, The Real Boy can dynamically adjust the approximation based 
+                  on the incoming waveform. One way to do this is by starting with a square wave approximation, then calculating 
+                  the difference (error) between the original and the approximation, and repeating the process. This iterative 
+                  refinement captures more of the waveform's complexity—producing something between a classic bitcrusher and a 
+                  smarter signal encoder.
+                </p>
+
+                <div className="my-8">
+                  <img 
+                    src="/graphs/bircrusher-vs-iter.png" 
+                    alt="Iterative signal approximation comparison"
+                    className="w-full rounded-lg shadow-lg"
+                  />
+                  <p className="text-sm text-gray-500 mt-2 text-center">
+                    The Real Boy's iterative approximation (right) captures more detail than a standard bitcrusher (left)
+                  </p>
+                </div>
+
+                <p className="text-gray-600 mb-4">
+                  Why do this? Well, firstly, the approximation can be used as a standalone synth fuzz pedal (see demo above). 
+                  But more importantly, it gives us <strong>discrete but detailed</strong> data about the guitar's waveform. That 
+                  data can then be used to <strong>resynthesize</strong> the signal using modular synth techniques—with far more 
+                  fidelity than typical pitch/frequency detectors.
+                </p>
+
+                <p className="text-gray-600 mb-4">
+                  We can be a bit more clever, and use a different algorithm—approximating the wave as a square wave, then adding 
+                  the error to that square wave, and so on to create a signal that's similar to the bitcrusher but where the 
+                  <strong>buckets are dynamically</strong> sized.
+                </p>
+
+                <h3 className="text-xl font-semibold mt-8 mb-3">Modular Synths Don't Normally Work On Guitars</h3>
+                <p className="text-gray-600 mb-4">
+                  Most modular synths expect clean, mathematically defined waveforms—like sine, square, or saw waves. These 
+                  waveforms are easy to modulate, because we know their exact formulas.
+                </p>
+
+                <p className="text-gray-600 mb-4">
+                  This is unfortunate, because when you play guitar you don't know the exact function that produced its output—only 
+                  that it's full of harmonic richness, string resonance, amplifier coloration, and environmental noise. Even if you 
+                  know the fundamental (say, 110 Hz on the A string), you have no idea what the actual waveform looks like in detail. 
+                  That waveform is shaped by your fingers, your gear, your strings, your pickups, even the humidity.
+                </p>
+
+                <p className="text-gray-600 mb-4">
+                  So most guitar synths cheat. They extract a few key features—like pitch and amplitude—and use those to generate 
+                  a clean synthetic waveform. Then they apply modular synthesis to <strong>that</strong> generated signal.
+                </p>
+
+                <p className="text-gray-600 mb-4">
+                  This works, but at a cost: you lose nearly all the complexity that makes a guitar sound like a guitar. The upper 
+                  harmonics, subtle dynamics, and expressiveness vanish. It's no longer your guitar—it's just a sine wave with a 
+                  pitch tracker.
+                </p>
+
+                <p className="text-gray-600 mb-4">
+                  <strong>The Real Boy</strong> improves on this situation by allowing for modular synthesis on a much richer input signal.
+                </p>
+
+                <h3 className="text-xl font-semibold mt-8 mb-3">Modular Synthesis</h3>
+                <p className="text-gray-600 mb-4">
+                  A synth pedal is a special kind of guitar pedal that creates its sound via <strong>modular synthesis</strong>. 
+                  This means that a signal is <strong>synthesized</strong> (i.e., made from scratch) by a generator and then 
+                  modulated to give it character. A common way to do this is through <strong>frequency modulation</strong>—modulating 
+                  the frequency of one wave using another wave. (Why use waves instead of other functions? Because waves are 
+                  computationally cheap and easy to implement in analog circuits!)
+                </p>
+
+                <p className="text-gray-600 mb-4">
+                  So if you start out by generating a sine wave at 440 hz (this is called the <strong>carrier</strong> signal), 
+                  the waveform is:
+                </p>
+
+                <div className="my-4">
+                  <Math
+                    math="x(t) = Asin(2 \pi \cdot 440 \cdot t)"
+                    block={true}
+                  />
+                </div>
+
+                <p className="text-gray-600 mb-4">
+                  Here's what the waveform would look like if we added a modulator whose frequency is also 440. We say that 
+                  this modulator has a <strong>harmonic ratio</strong> of 1 (integer harmonic ratios tend to sound much better).
+                </p>
+
+                <div className="my-4">
+                  <Math
+                    math="x(t) = A \sin\left(2\pi \cdot 440 \cdot t + \underbrace{\vphantom{2\pi \cdot 440 \cdot t} I \sin(2\pi \cdot 440 \cdot t)}_{\text{modulator term}}\right)"
+                    block={true}
+                  />
+                </div>
+
+                <p className="text-gray-600 mb-4">
+                  You can try it out below. Modulation is a really cool effect. You can get very cool sounds like the{' '}
+                  <a href="https://www.youtube.com/watch?v=dzBhGheAIYo" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                    Yamaha DX-7
+                  </a>.
+                </p>
+
                 <div className="mb-6">
                   <button
                     onClick={() => setIsFMDemoOpen(!isFMDemoOpen)}
@@ -335,50 +459,6 @@ export default function Home() {
                   )}
                 </div>
               </div>
-
-              <h3 className="text-xl font-semibold mt-8">Waveshaping</h3>
-              <p className="text-gray-600">
-                The input signal <Math math="x(t)" /> is transformed using a non-linear transfer function that creates harmonically rich distortion. The basic waveshaping function is:
-              </p>
-              <Math 
-                math="f(x) = \tanh(\alpha x)" 
-                block={true}
-              />
-              <p className="text-gray-600">
-                where <Math math="\alpha" /> controls the amount of distortion. Higher values create more aggressive clipping. The graph below shows this transfer function:
-              </p>
-              
-              <div className="my-8 flex flex-col items-center justify-center">
-                <div className="w-full max-w-2xl">
-                  <WavePlot alpha={distortionAmount} height={300} />
-                  <div className="mt-4 flex items-center justify-center space-x-4">
-                    <label className="text-sm text-gray-600">Distortion Amount (α):</label>
-                    <input 
-                      type="range" 
-                      min="0.5" 
-                      max="10" 
-                      step="0.5" 
-                      value={distortionAmount}
-                      onChange={(e) => {
-                        setDistortionAmount(parseFloat(e.target.value));
-                      }}
-                      className="w-48"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <h3 className="text-xl font-semibold mt-8">Frequency Analysis</h3>
-              <p className="text-gray-600">
-                We analyze the frequency content using the Fourier transform:
-              </p>
-              <Math 
-                math="X(f) = \int_{-\infty}^{\infty} x(t)e^{-2\pi i f t}dt" 
-                block={true}
-              />
-              <p className="text-gray-600">
-                This allows us to visualize how the pedal affects different frequency components of your signal, as shown in the plots above.
-              </p>
             </div>
           )}
         </section>

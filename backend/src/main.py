@@ -64,11 +64,13 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
 
     # Function to create plots
     def create_plots(start_idx, end_idx, figsize=(15, 12)):
+        # Set style for minimal look
+        plt.style.use('seaborn-v0_8-white')
         fig = plt.figure(figsize=figsize)
         
         # Plot original signal
-        plt.subplot(211)
-        plt.title('Original vs Transformed')
+        ax1 = plt.subplot(211)
+        plt.title('Original vs Transformed', pad=20)
         plt.plot(time[start_idx:end_idx], input_signal[start_idx:end_idx], label='Original', alpha=0.7)
         
         # Plot all transformations
@@ -76,26 +78,30 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
             plt.plot(time[start_idx:end_idx], signal[start_idx:end_idx], 
                     label=f'Transform {i+1}', alpha=0.7)
         
-        plt.legend()
-        plt.grid(True)
+        plt.legend(frameon=False)
+        # Remove top and right spines
+        ax1.spines['top'].set_visible(False)
+        ax1.spines['right'].set_visible(False)
         plt.margins(x=0)
         
         # Plot residuals
-        plt.subplot(212)
-        plt.title('Residuals')
+        ax2 = plt.subplot(212)
+        plt.title('Residuals', pad=20)
         for i, signal in enumerate(transformed_signals):
             residual = input_signal - signal
             plt.plot(time[start_idx:end_idx], residual[start_idx:end_idx], 
                     label=f'Residual {i+1}', alpha=0.7)
         
-        plt.legend()
-        plt.grid(True)
+        plt.legend(frameon=False)
+        # Remove top and right spines
+        ax2.spines['top'].set_visible(False)
+        ax2.spines['right'].set_visible(False)
         plt.margins(x=0)
         plt.tight_layout(pad=3.0)
         
         # Save plot to bytes buffer
         buf = io.BytesIO()
-        plt.savefig(buf, format='png', dpi=300, bbox_inches='tight')
+        plt.savefig(buf, format='png', dpi=300, bbox_inches='tight', facecolor='white')
         buf.seek(0)
         plot_bytes = buf.getvalue()
         plt.close(fig)

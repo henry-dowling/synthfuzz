@@ -139,16 +139,16 @@ export default function Home() {
               height={150}
             />
           </div>
-          <h2 className="text-2xl font-bold mb-8">Audio Examples:</h2>
+          <h2 className="text-2xl mb-8">Audio Examples:</h2>
           
-          <div className="space-y-2 max-w-2xl mx-auto mb-8 font-mono">
+          <div className="space-y-1 max-w-2xl mx-auto mb-12 font-mono text-base">
             {SAMPLE_AUDIO_FILES.map((sample) => (
               <label
                 key={sample.id}
-                className="block cursor-pointer"
+                className="block cursor-pointer whitespace-pre"
               >
                 <span className="inline-flex items-center">
-                  <span className="mr-2">[{selectedSample === sample.id && !isUploadMode ? "x" : " "}]</span>
+                  <span className="mr-1">[{selectedSample === sample.id && !isUploadMode ? "x" : " "}]</span>
                   <input
                     type="radio"
                     name="audioExample"
@@ -170,9 +170,9 @@ export default function Home() {
             ))}
 
             {/* Upload option */}
-            <label className="block cursor-pointer">
+            <label className="block cursor-pointer whitespace-pre">
               <span className="inline-flex items-center">
-                <span className="mr-2">[{isUploadMode ? "x" : " "}]</span>
+                <span className="mr-1">[{isUploadMode ? "x" : " "}]</span>
                 <input
                   type="radio"
                   name="audioExample"
@@ -185,7 +185,6 @@ export default function Home() {
                   className="sr-only"
                 />
                 Upload your own
-                {selectedFile && <span className="ml-1">– {selectedFile.name}</span>}
               </span>
               <input
                 type="file"
@@ -206,10 +205,10 @@ export default function Home() {
 
           {/* Show UI when either a file is selected, sample is selected, or we're in upload mode */}
           {(selectedFile !== null || selectedSample !== null || isUploadMode) && (
-            <div className="text-center">
-              <div className="mb-6 max-w-md mx-auto font-mono">
-                <div className="mb-2">Iteration depth: {iterations}</div>
-                <div className="flex items-center justify-center space-x-2">
+            <div className="text-center font-mono">
+              <div className="mb-12 max-w-md mx-auto">
+                <div className="mb-1">Iteration depth: {iterations}</div>
+                <div className="flex items-center justify-center">
                   <input
                     type="range"
                     id="iterations"
@@ -217,7 +216,7 @@ export default function Home() {
                     max="10"
                     value={iterations}
                     onChange={(e) => setIterations(parseInt(e.target.value))}
-                    className="w-48 h-px bg-gray-300 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black"
+                    className="w-48 h-px bg-gray-300 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black"
                   />
                 </div>
                 <div className="text-xs text-gray-500 mt-2">More iterations preserve harmonic detail</div>
@@ -225,7 +224,7 @@ export default function Home() {
               <button
                 onClick={handleProcess}
                 disabled={isProcessing}
-                className="font-mono hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                className="font-mono hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 mb-12"
               >
                 {isProcessing ? '... processing' : '→ Run approximation'}
               </button>
@@ -239,7 +238,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Input Audio */}
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
-                      <h3 className="text-lg font-medium mb-4">Input Audio</h3>
+                      <div className="font-mono mb-4">Input Audio</div>
                       <audio 
                         controls 
                         className="w-full"
@@ -251,7 +250,7 @@ export default function Home() {
 
                     {/* Processed Audio */}
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
-                      <h3 className="text-lg font-medium mb-4">Processed Audio</h3>
+                      <div className="font-mono mb-4">Processed Audio</div>
                       <audio 
                         controls 
                         className="w-full"
@@ -269,9 +268,9 @@ export default function Home() {
                             downloadUrl.click();
                             document.body.removeChild(downloadUrl);
                           }}
-                          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+                          className="font-mono hover:underline cursor-pointer"
                         >
-                          Download Processed Audio
+                          → Download result
                         </button>
                       </div>
                     </div>
@@ -280,7 +279,7 @@ export default function Home() {
                   {/* Signal Analysis Plots */}
                   {fullPlot && (
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
-                      <h3 className="text-lg font-medium mb-4">Full Signal Analysis</h3>
+                      <div className="font-mono mb-4">Full Signal Analysis</div>
                       <Image 
                         src={fullPlot} 
                         alt="Full signal analysis plot"
@@ -293,7 +292,7 @@ export default function Home() {
 
                   {zoomedPlot && (
                     <div className="p-4 bg-gray-50 rounded border border-gray-200">
-                      <h3 className="text-lg font-medium mb-4">Zoomed-in Signal Analysis</h3>
+                      <div className="font-mono mb-4">Zoomed-in Signal Analysis</div>
                       <Image 
                         src={zoomedPlot} 
                         alt="Zoomed signal analysis plot"

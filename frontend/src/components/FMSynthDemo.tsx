@@ -276,13 +276,6 @@ export const FMSynthDemo: React.FC<FMSynthDemoProps> = ({
         </button>
       </div>
 
-      <div className="mt-6 text-sm text-gray-600">
-        <p className="text-gray-600">
-          <strong>How it works:</strong> Instead of using low frequencies (like in tremolo), FM synthesis typically uses audio-rate 
-          modulation frequencies that are related to the carrier frequency by simple ratios. For example, when the modulator 
-          is 2x the carrier frequency, you get odd harmonics. When it&apos;s 1x, you get a different spectrum of harmonics. 
-          The modulation index controls how many sidebands (additional frequencies) are produced.</p>
-      </div>
     </div>
   );
 }; 

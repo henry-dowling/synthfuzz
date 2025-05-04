@@ -35,7 +35,6 @@ export default function Home() {
   const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>('electric');
   const [isFaqOpen, setIsFaqOpen] = useState(false);
-  const [isFMDemoOpen, setIsFMDemoOpen] = useState(false);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -417,53 +416,15 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-600 mb-4">
-                  You can try it out below. Modulation is a really cool effect. You can get very cool sounds like the{' '}
+                  Modulation is a really cool effect. You can get very cool sounds like the{' '}
                   <a href="https://www.youtube.com/watch?v=dzBhGheAIYo" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
                     Yamaha DX-7
                   </a>.
+                  You can try it out below. 
                 </p>
 
-                <div className="mb-6">
-                  <button
-                    onClick={() => setIsFMDemoOpen(!isFMDemoOpen)}
-                    className="w-full text-left flex justify-between items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-                  >
-                    <div>
-                      <h3 className="text-xl font-semibold text-blue-900 mb-1">Interactive: FM Synthesis Explorer</h3>
-                      <p className="text-sm text-blue-700">
-                        Experiment with frequency modulation synthesis to understand how complex timbres are created
-                      </p>
-                    </div>
-                    <svg
-                      className={`w-6 h-6 transform transition-transform ${isFMDemoOpen ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {isFMDemoOpen && (
-                    <div className="mt-4">
-                      <p className="text-gray-600 mb-6">
-                        Experience the magic of modular synthesis right in your browser! Below is an interactive demonstration 
-                        of frequency modulation (FM) synthesis - one of the core techniques that gives the Real Boy pedal its unique character.
-                      </p>
-                      
-                      <FMSynthDemo />
-                      
-                      <div className="mt-6">
-                        <h4 className="text-lg font-semibold">Understanding FM Synthesis</h4>
-                        <p className="text-gray-600">
-                          In FM synthesis, we use one oscillator (the modulator) to change the frequency of another oscillator 
-                          (the carrier). The carrier frequency determines the base pitch, while the modulator frequency affects 
-                          the timbre. The modulation index controls how dramatic this effect is - higher values create more 
-                          complex, rich sounds. Try adjusting the controls above to create your own unique sounds!
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                <div className="mt-4">
+                  <FMSynthDemo />
                 </div>
               </div>
             </div>

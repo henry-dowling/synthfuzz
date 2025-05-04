@@ -37,10 +37,10 @@ export default function About() {
               {" "}and{" "}
               <a href="https://github.com/henry-dowling" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Henry</a> in NYC. 
               You can find us on{" "}
-              <a href="https://open.spotify.com/artist/4KteP8o6Au9QpDXO14xtWu?si=zg4FfkZuT_GYgIYuhJdqlg" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Spotify</a>
-              {" "}here and{" "}
               <a href="https://github.com/henry-dowling/synthfuzz" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Github</a>
-              {" "}here.
+              {" "} and{" "}
+              <a href="https://open.spotify.com/artist/4KteP8o6Au9QpDXO14xtWu?si=zg4FfkZuT_GYgIYuhJdqlg" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Spotify</a>
+              .
             </p>
 
             <div className="flex justify-center my-12">

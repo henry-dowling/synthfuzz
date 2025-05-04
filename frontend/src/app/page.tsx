@@ -35,6 +35,7 @@ export default function Home() {
   const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>('electric');
   const [isFaqOpen, setIsFaqOpen] = useState(false);
+  const [iterations, setIterations] = useState<number>(4); // Default to 4 iterations
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,6 +58,7 @@ export default function Home() {
       if (selectedFile) {
         formData.append('audio', selectedFile);
         formData.append('preset', 'custom'); // Add preset info for uploaded files
+        formData.append('iterations', iterations.toString());
       } else if (selectedSample) {
         // Fetch the sample audio file and append it to the form data
         const sampleFile = SAMPLE_AUDIO_FILES.find(s => s.id === selectedSample);
@@ -64,6 +66,7 @@ export default function Home() {
         
         // Add preset information
         formData.append('preset', sampleFile.id);
+        formData.append('iterations', iterations.toString());
         
         // Fetch and append the sample audio
         const response = await fetch(sampleFile.path);
@@ -200,6 +203,25 @@ export default function Home() {
 
           {(selectedFile || selectedSample) && (
             <div className="text-center">
+              <div className="mb-6 max-w-md mx-auto">
+                <label htmlFor="iterations" className="block text-lg font-medium text-gray-900 mb-3">
+                  Square Wave Approximation Iterations: {iterations}
+                </label>
+                <div className="space-y-2">
+                  <input
+                    type="range"
+                    id="iterations"
+                    min="1"
+                    max="10"
+                    value={iterations}
+                    onChange={(e) => setIterations(parseInt(e.target.value))}
+                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600 hover:accent-blue-700"
+                  />
+                  <p className="text-sm text-gray-600 text-center">
+                    More iterations means higher fidelity approximation of the original signal
+                  </p>
+                </div>
+              </div>
               <button
                 onClick={handleProcess}
                 disabled={isProcessing}

@@ -22,7 +22,8 @@ def main(input_signal, sample_rate=44100, window_size=10000, plot_length=None, p
         plot_offset (int): Offset in samples for where to start plotting (default: 0)
         transformations (list): List of transformation configurations, where each config is a dict with:
             - 'type': 'iterative' or 'combo'
-            - 'functions': list of functions to apply
+            - 'function': function to apply (for iterative type)
+            - 'functions': list of functions (for combo type)
             - 'iterations': number of iterations (for iterative type)
     
     Returns:

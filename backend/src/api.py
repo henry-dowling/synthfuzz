@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
 import numpy as np
@@ -8,6 +8,7 @@ import base64
 import os
 from lib.utils import load_audio_file, save_audio_file
 from main import main
+from lib.square import square_wave_maker
 
 app = FastAPI()
 
@@ -25,7 +26,10 @@ app.add_middleware(
 )
 
 @app.post("/process-audio")
-async def process_audio(audio: UploadFile = File(...)):
+async def process_audio(
+    audio: UploadFile = File(...),
+    iterations: int = Form(4)  # Default to 4 iterations if not specified
+):
     print("Processing audio file...")
     # Create a temporary file to store the uploaded audio
     with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(audio.filename)[1]) as temp_file:
@@ -42,7 +46,14 @@ async def process_audio(audio: UploadFile = File(...)):
             signal,
             sample_rate=sr,
             window_size=10000,
-            plot_offset=0
+            plot_offset=0,
+            transformations=[
+                {
+                    'type': 'iterative',
+                    'function': square_wave_maker,
+                    'iterations': iterations
+                }
+            ]
         )
         
         # Save the processed audio to a temporary file

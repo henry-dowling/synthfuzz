@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Math } from "../components/Math";
+import { WavePlot } from "../components/WavePlot";
 
 // Sample audio data
 const SAMPLE_AUDIO_FILES = [
@@ -33,6 +34,7 @@ export default function Home() {
   const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
   const [selectedSample, setSelectedSample] = useState<string | null>(null);
   const [isFaqOpen, setIsFaqOpen] = useState(false);
+  const [distortionAmount, setDistortionAmount] = useState(2);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -300,8 +302,28 @@ export default function Home() {
                 block={true}
               />
               <p className="text-gray-600">
-                where <Math math="\alpha" /> controls the amount of distortion. Higher values create more aggressive clipping.
+                where <Math math="\alpha" /> controls the amount of distortion. Higher values create more aggressive clipping. The graph below shows this transfer function:
               </p>
+              
+              <div className="my-8 flex flex-col items-center justify-center">
+                <div className="w-full max-w-2xl">
+                  <WavePlot alpha={distortionAmount} height={300} />
+                  <div className="mt-4 flex items-center justify-center space-x-4">
+                    <label className="text-sm text-gray-600">Distortion Amount (α):</label>
+                    <input 
+                      type="range" 
+                      min="0.5" 
+                      max="10" 
+                      step="0.5" 
+                      value={distortionAmount}
+                      onChange={(e) => {
+                        setDistortionAmount(parseFloat(e.target.value));
+                      }}
+                      className="w-48"
+                    />
+                  </div>
+                </div>
+              </div>
 
               <h3 className="text-xl font-semibold mt-4">Frequency Analysis</h3>
               <p className="text-gray-600">

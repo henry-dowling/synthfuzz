@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@observablehq/plot": "^0.6.17",
     "@types/katex": "^0.16.7",
     "katex": "^0.16.22",
     "next": "15.3.1",

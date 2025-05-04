@@ -179,7 +179,7 @@ export default function Home() {
                   }}
                   className="sr-only"
                 />
-                Upload your own
+                Upload your  (mp3)
               </span>
               <input
                 type="file"

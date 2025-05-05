@@ -6,13 +6,26 @@ import Link from "next/link";
 import { Math } from "../components/Math";
 import { FMSynthDemo } from "../components/FMSynthDemo";
 
+interface AudioFile {
+  id: string;
+  name: string;
+  description: string;
+  path: string;
+  processedPath?: string;
+  fullPlotPath?: string;
+  zoomedPlotPath?: string;
+}
+
 // Sample audio data
-const SAMPLE_AUDIO_FILES = [
+const SAMPLE_AUDIO_FILES: AudioFile[] = [
   {
     id: 'electric',
     name: 'Electric Guitar',
     description: 'Straten Marshall',
-    path: '/audio-samples/shred.mp3'
+    path: '/audio-samples/shred.mp3',
+    processedPath: '/audio-samples/processed-electric.mp3',
+    fullPlotPath: '/graphs/sample-audio-graph.png',
+    zoomedPlotPath: '/graphs/sample-audio-graph-zoomed.png'
   },
   {
     id: 'acoustic',
@@ -31,9 +44,9 @@ const SAMPLE_AUDIO_FILES = [
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [processedAudio, setProcessedAudio] = useState<string | null>(null);
-  const [fullPlot, setFullPlot] = useState<string | null>(null);
-  const [zoomedPlot, setZoomedPlot] = useState<string | null>(null);
+  const [processedAudio, setProcessedAudio] = useState<string | null>('/audio-samples/processed-electric.mp3');
+  const [fullPlot, setFullPlot] = useState<string | null>('/graphs/sample-audio-graph.png');
+  const [zoomedPlot, setZoomedPlot] = useState<string | null>('/graphs/sample-audio-graph-zoomed.png');
   const [selectedSample, setSelectedSample] = useState<string | null>('electric');
   const [isFaqOpen, setIsFaqOpen] = useState(false);
   const [iterations, setIterations] = useState<number>(4); // Default to 4 iterations
@@ -153,9 +166,15 @@ export default function Home() {
                       setSelectedSample(sample.id);
                       setSelectedFile(null);
                       setIsUploadMode(false);
-                      setProcessedAudio(null);
-                      setFullPlot(null);
-                      setZoomedPlot(null);
+                      if (sample.processedPath && sample.fullPlotPath && sample.zoomedPlotPath) {
+                        setProcessedAudio(sample.processedPath);
+                        setFullPlot(sample.fullPlotPath);
+                        setZoomedPlot(sample.zoomedPlotPath);
+                      } else {
+                        setProcessedAudio(null);
+                        setFullPlot(null);
+                        setZoomedPlot(null);
+                      }
                     }}
                     className="sr-only"
                   />
@@ -240,7 +259,7 @@ export default function Home() {
 
                     {/* Processed Audio */}
                     <div>
-                      <div className="font-mono mb-4">Processed Audio</div>
+                      <div className="font-mono mb-4">Fuzzed Audio</div>
                       <audio 
                         controls 
                         className="w-full"

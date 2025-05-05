@@ -333,7 +333,7 @@ export default function Home() {
             <div className="prose max-w-none">
               <div className="mb-8">
                 <p className="text-gray-600 mb-4">
-                  The <strong>Real Boy</strong> is a concept for a modular synth pedal that preserves the rich upper harmonies 
+                  The <strong>Real Boy</strong> is a concept for a synth pedal that preserves the rich upper harmonies 
                   of the guitar. Unlike most synth pedals, it captures information about the guitar&apos;s sound besides just its 
                   fundamental frequency.
                 </p>
@@ -382,13 +382,13 @@ export default function Home() {
                 <p className="text-gray-600 mb-4">
                   Why do this? Well, firstly, the approximation can be used as a standalone synth fuzz pedal (shown above). 
                   But more importantly, it gives us <strong>discrete but detailed</strong> data about the guitar&apos;s waveform. That 
-                  data can then be used to <strong>resynthesize</strong> the signal using modular synth techniques—with far more 
+                  data can then be used to <strong>resynthesize</strong> the signal using synth techniques—with far more 
                   fidelity than typical pitch/frequency detectors.
                 </p>
 
-                <h3 className="text-xl font-semibold mt-8 mb-3">Modular Synths Don&apos;t Normally Work On Guitars</h3>
+                <h3 className="text-xl font-semibold mt-8 mb-3">Synths Don&apos;t Normally Work On Guitars</h3>
                 <p className="text-gray-600 mb-4">
-                  Most modular synths expect clean, mathematically defined waveforms—like sine, square, or saw waves. These 
+                  Most synths expect clean, mathematically defined waveforms—like sine, square, or saw waves. These 
                   waveforms are easy to modulate, because we know their exact formulas.
                 </p>
 
@@ -401,7 +401,7 @@ export default function Home() {
 
                 <p className="text-gray-600 mb-4">
                   So most guitar synths cheat. They extract a few key features—like pitch and amplitude—and use those to generate 
-                  a clean synthetic waveform. Then they apply modular synthesis to <strong>that</strong> generated signal.
+                  a clean synthetic waveform. Then they apply synthesis to <strong>that</strong> generated signal.
                 </p>
 
                 <p className="text-gray-600 mb-4">
@@ -411,12 +411,12 @@ export default function Home() {
                 </p>
 
                 <p className="text-gray-600 mb-4">
-                  <strong>The Real Boy</strong> improves on this situation by allowing for modular synthesis on a much richer input signal.
+                  <strong>The Real Boy</strong> improves on this situation by allowing for synthesis on a much richer input signal.
                 </p>
 
-                <h3 className="text-xl font-semibold mt-8 mb-3">Modular Synthesis</h3>
+                <h3 className="text-xl font-semibold mt-8 mb-3">Synthesis</h3>
                 <p className="text-gray-600 mb-4">
-                  A synth pedal is a special kind of guitar pedal that creates its sound via <strong>modular synthesis</strong>. 
+                  A synth pedal is a special kind of guitar pedal that creates its sound via <strong>synthesis</strong>. 
                   This means that a signal is <strong>synthesized</strong> (i.e., made from scratch) by a generator and then 
                   modulated to give it character. A common way to do this is through <strong>frequency modulation</strong>—modulating 
                   the frequency of one wave using another wave. (Why use waves instead of other functions? Because waves are 
